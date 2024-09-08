@@ -1,0 +1,7 @@
+backend membuat api
+1. npm init -y (package json)
+2. npm i express express-fileupload mysql2 sequelize cors
+
+frontend
+1. npx create-react-app frontend
+3. npm i react-router-dom axios bulma
