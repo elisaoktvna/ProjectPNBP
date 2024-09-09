@@ -14,4 +14,4 @@ app.use(express.static("public"));
 app.use(KategoriRoute);
 app.use(ProductRoute);
 
-app.listen(5000, ()=> console.log('server up and running...'));
+app.listen(5000, () => console.log("server up and running..."));
