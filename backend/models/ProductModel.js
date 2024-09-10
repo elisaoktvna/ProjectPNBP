@@ -4,7 +4,7 @@ import db from "../config/Database.js";
 const { DataTypes } = Sequelize;
 
 const Product = db.define(
-  "produk",
+  "products",
   {
     name: DataTypes.STRING,
     price: DataTypes.FLOAT,
@@ -15,7 +15,7 @@ const Product = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "kategori",
+        model: "categories",
         key: "id",
       },
     },
@@ -26,3 +26,6 @@ const Product = db.define(
 );
 
 export default Product;
+(async () => {
+  await db.sync();
+})();
