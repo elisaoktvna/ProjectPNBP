@@ -1,8 +1,13 @@
 import { Sequelize } from "sequelize";
-
-const db = new Sequelize('kasuli_db', 'root', 'elisaoktvna4', {
-    host: 'localhost',
-    dialect: 'mysql'
+import dotenv from "dotenv";
+dotenv.config();
+const DBHOST = process.env.DBHOST;
+const DBNAME = process.env.DBNAME;
+const DBUSER = process.env.DBUSER;
+const DBPASS = process.env.DBPASS;
+const db = new Sequelize(DBNAME, DBUSER, DBPASS, {
+  host: DBHOST,
+  dialect: "mysql",
 });
 
 export default db;
