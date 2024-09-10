@@ -24,7 +24,6 @@ class ProdukService {
   static async saveProduk(data, file) {
     const allowedType = [".png", ".jpg", ".jpeg"];
     const resFile = await FileService.saveFile(file, allowedType, 5000000);
-    if (resFile.status !== 200) return { msg: resFile.msg };
     const { fileName, url } = resFile.data;
     const result = await Produk.create({
       ...data,
@@ -59,7 +58,7 @@ class ProdukService {
         id,
       },
     });
-    
+
     return data;
   }
   static async deleteProduk(id, image) {

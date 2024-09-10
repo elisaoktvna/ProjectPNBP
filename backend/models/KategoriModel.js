@@ -4,7 +4,8 @@ import db from "../config/Database.js";
 const { DataTypes } = Sequelize;
 
 const Kategori = db.define(
-  "kategori",
+  "categories",
+
   {
     name: DataTypes.STRING,
 
