@@ -2,3 +2,28 @@ GET http://localhost:5000/kategori
 
 ###
 GET http://localhost:5000/kategori/1
+
+###
+GET http://localhost:5000/products
+
+###
+GET http://localhost:5000/transaksi
+
+# tambah
+###
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name": "afi",
+    "username": "afi",
+    "password": "12345",
+    "confPassword": "12345",
+    "role": "karyawan"
+}
+
+###
+GET http://localhost:5000/users
+
+###
+GET http://localhost:5000/users/b66d5966-4ebc-44ed-a1d0-0bdb809252d7
