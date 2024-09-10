@@ -59,7 +59,7 @@ class ProdukService {
         id,
       },
     });
-    console.log("browser", dataUpdate, id, data);
+    
     return data;
   }
   static async deleteProduk(id, image) {
