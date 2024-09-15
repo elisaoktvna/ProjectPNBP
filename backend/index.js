@@ -46,5 +46,5 @@ app.use(KategoriRoute);
 app.use(TransactionRoute);
 app.use(ProdukRoute);
 app.use(UserRoute);
-app.listen(5000, "10.10.184.250");
-// app.listen(5000, () => console.log("server up and running..."));
+// app.listen(5000, "10.10.184.250");
+app.listen(5000, () => console.log("server up and running..."));
