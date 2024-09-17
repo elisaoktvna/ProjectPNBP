@@ -3,6 +3,8 @@ import Layout from "../../components/Layout";
 import Add from "./Add";
 import { Link } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
+import Delete from "./Delete";
+import Update from "./Update";
 
 const Kategori = () => {
   const { data: kategoris } = useFetch("/kategori");
@@ -69,18 +71,11 @@ const Kategori = () => {
                 </td>
                 <td className="border-b py-4">{kategori.name}</td>
                 <td className="border-b py-4">
-                  <a
-                    href=""
-                    className="text-white me-2 text-sm px-4 rounded-full hover:bg-green-500/70 bg-green-500 py-1"
-                  >
-                    Ubah
-                  </a>
-                  <a
-                    href=""
-                    className="text-white text-sm  px-4 rounded-full hover:bg-[#F65454]/70 bg-[#F65454] py-1"
-                  >
-                    Hapus
-                  </a>
+                  <Update
+                    id={kategori.id}
+                    data={{ name: kategori.name, url: kategori.url }}
+                  />
+                  <Delete id={kategori.id} nama={kategori.name} />
                 </td>
               </tr>
             );

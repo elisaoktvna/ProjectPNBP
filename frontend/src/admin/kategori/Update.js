@@ -3,8 +3,10 @@ import Modal from "../../components/Modal";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import File from "../../components/File";
+import FileInput from "../../components/File";
 
-const Add = () => {
+const Update = ({ id, data }) => {
   const [Show, setShow] = useState(false);
   const { setReload, reload } = useGlobalContext();
   const onSubmit = async (e) => {
@@ -16,28 +18,28 @@ const Add = () => {
     formData.append("title", nameVal);
     formData.append("file", imageVal);
     try {
-      await fetch(process.env.REACT_APP_BASE_URL + "/kategori", {
-        method: "POST",
+      await fetch(process.env.REACT_APP_BASE_URL + "/kategori/" + id, {
+        method: "PUT",
         body: formData,
       });
       setShow(false);
       e.target.reset();
       setReload(!reload);
-      toast.success("Kategori berhasil ditambahkan");
+      toast.success("Kategori berhasil diubah");
     } catch (error) {
-      toast.error("Kategori gagal ditambahkan");
+      toast.error("Kategori gagal diubah");
     }
   };
   return (
     <>
       <button
-        className="ms-auto bg-[#FFC200] hover:bg-[#FFC200]/70 px-5 py-2 text-sm text-white rounded-full"
+        className="text-white me-2 text-sm px-4 rounded-full hover:bg-green-500/70 bg-green-500 py-1"
         onClick={() => setShow(true)}
       >
-        Tambah Kategori
+        Ubah
       </button>
       <Modal
-        title={"Tambah Kategori"}
+        title={"Ubah Kategori"}
         show={Show}
         onClose={(val) => setShow(val)}
       >
@@ -47,6 +49,7 @@ const Add = () => {
               Nama
             </label>
             <input
+              defaultValue={data?.name}
               required
               type="text"
               name="name"
@@ -59,13 +62,14 @@ const Add = () => {
             <label htmlFor="image" className="text-sm inline-block mb-1">
               Gambar
             </label>
-            <input
+            {/* <input
               required
               type="file"
               name="image"
               id="image"
               className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-            />
+            /> */}
+            <FileInput name={"image"} url={data?.url} />
           </div>
           <div className="mt-5">
             <button
@@ -88,4 +92,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default Update;
