@@ -10,22 +10,25 @@ const Add = () => {
         e.preventDefault();
         const {name,image } =e.target; 
         const nameVal = name.value
-        const imageVal = image.file[0]
+        
+        const imageVal = image.files[0]
 
         const formData = new FormData();
-        formData.append("nama",nameVal)
-        // formData.append("image",imageVal)
+        formData.append("title",nameVal)
+        formData.append("file",imageVal)
 
         const res  =await fetch(process.env.REACT_APP_BASE_URL,{
             method:"POST",
             body:(formData)
         });
+        console.log(res);
+        
     }
   return (
       <>
            <Link className='ms-auto bg-[#FFC200] hover:bg-[#FFC200]/70 px-5 py-2 text-sm text-white rounded-full' onClick={()=>setShow(true)}>Tambah Kategori</Link>
           <Modal title={"Tambah Kategori"} show={Show} onClose={(val) => setShow(val)}>
-              <form  onSubmit={onSubmit}>
+              <form  onSubmit={onSubmit} encType='multipart/form-data'>
                   <div className="form-group mb-2">
                       <label htmlFor="name" className='text-sm inline-block mb-1'>Nama</label>
                       <input required type="text" name="name" id="name" className='block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm' placeholder='Nama Kategori'/>

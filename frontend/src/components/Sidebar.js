@@ -32,10 +32,7 @@ const Sidebar = () => {
                     <Link to={"/"} class="block px-4 py-2 rounded hover:bg-gray-300">Home</Link>
                 </li>
                 <li class="mb-2">
-                    <Link href="#" class="block px-4 py-2 rounded hover:bg-gray-300">Tambah Produk</Link>
-                </li>
-                <li class="mb-2">
-                    <Link href="#" class="block px-4 py-2 rounded hover:bg-gray-300">List Produk</Link>
+                    <Link to={"/listproduk"} class="block px-4 py-2 rounded hover:bg-gray-300">List Produk</Link>
                 </li>
                 <li class="mb-2">
                     <Link to={"/kategori"} class="block px-4 py-2 rounded hover:bg-gray-300">Kategori</Link>

@@ -5,6 +5,7 @@ import Kategori from './admin/kategori/Kategori.js';
 
 import './index.css';
 import {BrowserRouter,Routes,Route} from "react-router-dom"
+import Listproduk from './admin/listproduk/Listproduk.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
         <Routes>
             <Route path="/" element={<App />} />
             <Route path="/kategori" element={ <Kategori/>} />
+            <Route path="/listproduk" element={ <Listproduk/>} />
         </Routes>
     </BrowserRouter>
 );
