@@ -22,7 +22,7 @@ const Kategori = () => {
       <table className="border w-full">
         <thead>
           <tr>
-            <th className="border-b py-4 text-slate-500 font-semibold w-22">
+            <th className="border-b py-4 text-slate-500 font-semibold w-16">
               No
             </th>
             <th
