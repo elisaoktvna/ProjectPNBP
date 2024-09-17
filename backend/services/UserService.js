@@ -11,6 +11,7 @@ class UserService {
       where: {
         username: username,
       },
+      order: [["id", "DESC"]],
     });
     if (!user || !(await argon2.verify(user.password, password))) {
       throw new CustomError("User tidak ditemukan", 400);

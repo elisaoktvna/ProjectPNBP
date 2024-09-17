@@ -3,7 +3,9 @@ import FileService from "./FileService.js";
 
 class KategoriService {
   static async getKategoriAll() {
-    const response = await Kategori.findAll();
+    const response = await Kategori.findAll({
+      order: [["id", "DESC"]],
+    });
     return response;
   }
   static async saveKategori(title, file) {
@@ -15,7 +17,6 @@ class KategoriService {
       image: fileName,
       url,
     });
-
     return data;
   }
   static async getKategoriById(id) {

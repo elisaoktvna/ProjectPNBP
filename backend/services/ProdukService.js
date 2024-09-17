@@ -6,6 +6,7 @@ class ProdukService {
   static async getProdukAll() {
     const response = await Produk.findAll({
       include: Kategori,
+      order: [["id", "DESC"]],
     });
     return response;
   }
