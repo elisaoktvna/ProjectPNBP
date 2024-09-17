@@ -71,7 +71,7 @@ const Update = ({ id, data }) => {
             /> */}
             <FileInput name={"image"} url={data?.url} />
           </div>
-          <div className="mt-5">
+          <div className="mt-5 flex justify-end items-center">
             <button
               type="submit"
               className="px-5 hover:bg-[#FFC200]/70 text-sm py-2 bg-[#FFC200] rounded-full text-white "
@@ -81,7 +81,7 @@ const Update = ({ id, data }) => {
             <button
               onClick={() => setShow(false)}
               type="button"
-              className="px-5 hover:bg-[#FF8E29] hover:text-white ms-3 border  text-sm py-2  border-[#FF8E29] text-[#FF8E29] rounded-full  mt-4"
+              className="px-5 hover:bg-[#FF8E29] hover:text-white ms-3 border  text-sm py-2  border-[#FF8E29] text-[#FF8E29] rounded-full  "
             >
               Batal
             </button>

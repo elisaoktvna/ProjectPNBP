@@ -41,7 +41,7 @@ const Delete = ({ id, nama }) => {
           <p className="text-sm text-slate-500">
             Kategori akan terhapus permanent dan tidak dapat dikembalikan
           </p>
-          <div className="mt-5">
+          <div className="mt-5 flex justify-end items-center">
             <button
               type="submit"
               className="px-5 hover:bg-[#F65454]/70 text-sm py-2 bg-[#F65454] rounded-full text-white "
@@ -51,7 +51,7 @@ const Delete = ({ id, nama }) => {
             <button
               onClick={() => setShow(false)}
               type="button"
-              className="px-5 hover:bg-[#FF8E29] hover:text-white ms-3 border  text-sm py-2  border-[#FF8E29] text-[#FF8E29] rounded-full  mt-4"
+              className="px-5 hover:bg-[#FF8E29] hover:text-white ms-3 border  text-sm py-2  border-[#FF8E29] text-[#FF8E29] rounded-full  "
             >
               Batal
             </button>
