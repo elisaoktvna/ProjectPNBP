@@ -29,7 +29,7 @@ const Sidebar = () => {
         <nav class="flex-1 px-4 py-6">
             <ul>
                 <li class="mb-2">
-                    <Link to={"/"} class="block px-4 py-2 rounded hover:bg-gray-300">Home</Link>
+                    <Link to={"/Dashboard"} class="block px-4 py-2 rounded hover:bg-gray-300">Home</Link>
                 </li>
                 <li class="mb-2">
                     <Link to={"/listproduk"} class="block px-4 py-2 rounded hover:bg-gray-300">List Produk</Link>
@@ -38,7 +38,7 @@ const Sidebar = () => {
                     <Link to={"/kategori"} class="block px-4 py-2 rounded hover:bg-gray-300">Kategori</Link>
                 </li>
                 <li class="mb-2">
-                    <Link href="#" class="block px-4 py-2 rounded hover:bg-gray-300">Produk Terlaris</Link>
+                <Link to={"/"} class="block px-4 py-2 rounded hover:bg-gray-300">Produk Terlaris</Link>
                 </li>
             </ul>
         </nav>
