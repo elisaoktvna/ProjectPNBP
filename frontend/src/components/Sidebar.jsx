@@ -23,38 +23,22 @@ const Sidebar = () => {
         </h3>
         <p className="text-[#535353] text-sm">Administrator</p>
       </div>
-      <nav class="flex-1 px-4 py-6">
-        <ul>
-          <li class="mb-2">
-            <Link to={"/"} class="block px-4 py-2 rounded hover:bg-gray-300">
-              Home
-            </Link>
-          </li>
-          <li class="mb-2">
-            <Link href="#" class="block px-4 py-2 rounded hover:bg-gray-300">
-              Tambah Produk
-            </Link>
-          </li>
-          <li class="mb-2">
-            <Link href="#" class="block px-4 py-2 rounded hover:bg-gray-300">
-              List Produk
-            </Link>
-          </li>
-          <li class="mb-2">
-            <Link
-              to={"/kategori"}
-              class="block px-4 py-2 rounded hover:bg-gray-300"
-            >
-              Kategori
-            </Link>
-          </li>
-          <li class="mb-2">
-            <Link href="#" class="block px-4 py-2 rounded hover:bg-gray-300">
-              Produk Terlaris
-            </Link>
-          </li>
-        </ul>
-      </nav>
+        <nav class="flex-1 px-4 py-6">
+            <ul>
+                <li class="mb-2">
+                    <Link to={"/Dashboard"} class="block px-4 py-2 rounded hover:bg-gray-300">Home</Link>
+                </li>
+                <li class="mb-2">
+                    <Link to={"/listproduk"} class="block px-4 py-2 rounded hover:bg-gray-300">List Produk</Link>
+                </li>
+                <li class="mb-2">
+                    <Link to={"/kategori"} class="block px-4 py-2 rounded hover:bg-gray-300">Kategori</Link>
+                </li>
+                <li class="mb-2">
+                <Link to={"/"} class="block px-4 py-2 rounded hover:bg-gray-300">Produk Terlaris</Link>
+                </li>
+            </ul>
+        </nav>
     </div>
   );
 };
