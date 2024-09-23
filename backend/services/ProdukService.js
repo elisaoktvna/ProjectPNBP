@@ -25,7 +25,9 @@ class ProdukService {
   static async saveProduk(data, file) {
     const allowedType = [".png", ".jpg", ".jpeg"];
     const resFile = await FileService.saveFile(file, allowedType, 5000000);
-    const { fileName, url } = resFile.data;
+    console.log(resFile);
+    
+    const { fileName, url } = resFile;
     const result = await Produk.create({
       ...data,
       image: fileName,

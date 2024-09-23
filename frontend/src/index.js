@@ -7,6 +7,7 @@ import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GlobalContextProvider } from "./contexts/GlobalContext.js";
 import Listproduk from './admin/listproduk/Listproduk.js';
+import Produk from "./admin/listproduk/Produk.js";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,7 +18,7 @@ root.render(
         <Routes>
             <Route path="/" element={<App />} />
             <Route path="/kategori" element={ <Kategori/>} />
-            <Route path="/listproduk" element={ <Listproduk/>} />
+            <Route path="/listproduk" element={ <Produk/>} />
         </Routes>
     </BrowserRouter>
   </GlobalContextProvider>
