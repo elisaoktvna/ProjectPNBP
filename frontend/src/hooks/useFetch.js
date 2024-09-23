@@ -9,10 +9,14 @@ export const useFetch = (url, option) => {
     getData();
   }, [reload]);
   const getData = async () => {
-    const res = await fetch(process.env.REACT_APP_BASE_URL + url, option);
-    if (res.ok) {
-      const result = await res.json();
-      setData(result);
+    try {
+      const res = await fetch(process.env.REACT_APP_BASE_URL + url, option);
+      if (res.ok) {
+        const result = await res.json();
+        setData(result);
+      }
+    } catch (error) {
+      setError(error);
     }
   };
 

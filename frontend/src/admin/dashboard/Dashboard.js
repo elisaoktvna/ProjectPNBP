@@ -1,84 +1,170 @@
-import React from 'react'
-import Layout from '../../components/Layout'
+import React from "react";
+import Layout from "../../components/Layout";
+import { useFetch } from "./../../hooks/useFetch";
+import { Doughnut, Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Dashboard = () => {
+  const { data: totalPenjualan } = useFetch("/getTotalPenjualan");
+  const { data: totalKeuntungan } = useFetch("/getTotalKeuntungan");
+  const { data: produkTerlaris } = useFetch("/produkTerlaris");
+  const { data: chartData } = useFetch("/getChartData");
+
+  // Format data untuk Bar Chart
+  const formattedChartData = {
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    datasets: [
+      {
+        label: "Total Keuntungan (Rp)",
+        data: chartData, // Data dari backend yang sudah di-fetch
+        backgroundColor: "rgba(75, 192, 192, 0.6)", // Warna batang
+        borderColor: "rgba(75, 192, 192, 1)", // Warna garis batang
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true, // Mulai dari 0
+      },
+    },
+  };
+
   return (
     <Layout>
+      {/* //Keuntungan dan Penjualan */}
+      <div className="container mx-auto p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-gray-700">
+              Total Penjualan
+            </h2>
+            <p className="text-gray-500 mt-1">Periode Bulan Ini</p>
+            <div className="flex items-center mt-4">
+              <span className="text-3xl font-semibold text-blue-600">
+                {totalPenjualan.total} Transaksi
+              </span>
+            </div>
+            <div
+              className={`${
+                totalPenjualan.isProfit ? "text-green-500" : "text-red-500"
+              } font-semibold mt-2`}
+            >
+              <span>{totalPenjualan.comparisonPercentage} dari bulan lalu</span>
+            </div>
+          </div>
 
-      {/* //keuntugan penjualan */}
-    <div class="container mx-auto p-6">
-    <div class= "grid grid-cols-1 lg:grid-cols-2 gap-4 ">  
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold text-gray-700">Total Penjualan</h2>
-        <p class="text-gray-500 mt-1">Periode Bulan Ini</p>
-        <div class="flex items-center mt-4">
-          <span class="text-3xl font-semibold text-blue-600">Rp 250.000.000</span>
-        </div>
-        <div class="text-green-500 font-semibold mt-2">
-          <span>+10% dari bulan lalu</span>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-gray-700">
+              Total Keuntungan
+            </h2>
+            <p className="text-gray-500 mt-1">Periode Bulan Ini</p>
+            <div className="flex items-center mt-4">
+              <span className="text-3xl font-semibold text-green-600">
+                {totalKeuntungan.total}
+              </span>
+            </div>
+            <div
+              className={`${
+                totalKeuntungan.isProfit ? "text-green-500" : "text-red-500"
+              } font-semibold mt-2`}
+            >
+              <span>
+                {totalKeuntungan.comparisonPercentage} dari bulan lalu
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold text-gray-700">Total Keuntungan</h2>
-        <p class="text-gray-500 mt-1">Periode Bulan Ini</p>
-        <div class="flex items-center mt-4">
-          <span class="text-3xl font-semibold text-green-600">Rp 50.000.000</span>
+
+      {/* Tabel Produk Terlaris dan Chart Keuntungan Bulanan */}
+      <div className="container mx-auto p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold text-gray-700 mb-4">
+              Tabel Produk Terlaris
+            </h2>
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">
+                    No
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">
+                    Nama Produk
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">
+                    Jumlah Terjual
+                  </th>
+                  <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">
+                    Harga
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {produkTerlaris.map((pt, i) => (
+                  <tr key={i}>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {i + 1}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {pt.name}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {pt.totalTerjual}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-200">
+                      {pt.price}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md h-[400px]">
+            <h2 className="text-xl font-bold text-gray-700 mb-4">
+              Keuntungan Bulanan
+            </h2>
+            <Bar data={formattedChartData} options={options} height={100} />
+          </div>
         </div>
-        <div class="text-red-500 font-semibold mt-2">
-          <span>-5% dari bulan lalu</span>
-        </div>
       </div>
-  </div>
-
-    {/* tabel dan pie chart */}
-  </div>
-  <div class="container mx-auto p-6">
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold text-gray-700 mb-4">Tabel Produk Terlaris</h2>
-        <table class="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th class="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">No</th>
-              <th class="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">Nama Produk</th>
-              <th class="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">Jumlah Terjual</th>
-              <th class="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">Harga</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="py-2 px-4 border-b border-gray-200">1</td>
-              <td class="py-2 px-4 border-b border-gray-200">Produk A</td>
-              <td class="py-2 px-4 border-b border-gray-200">100</td>
-              <td class="py-2 px-4 border-b border-gray-200">Rp 100.000</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-4 border-b border-gray-200">2</td>
-              <td class="py-2 px-4 border-b border-gray-200">Produk B</td>
-              <td class="py-2 px-4 border-b border-gray-200">75</td>
-              <td class="py-2 px-4 border-b border-gray-200">Rp 150.000</td>
-            </tr>
-            <tr>
-              <td class="py-2 px-4 border-b border-gray-200">3</td>
-              <td class="py-2 px-4 border-b border-gray-200">Produk C</td>
-              <td class="py-2 px-4 border-b border-gray-200">50</td>
-              <td class="py-2 px-4 border-b border-gray-200">Rp 200.000</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold text-gray-700 mb-4">Penjualan Produk (Pie Chart)</h2>
-        <canvas id="myPieChart"></canvas>
-      </div>
-    </div>
-  </div>
     </Layout>
-    
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

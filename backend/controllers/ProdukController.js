@@ -10,7 +10,15 @@ class ProductController {
       const response = await ProdukService.getProdukAll();
       return res.json(response);
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
+    }
+  }
+  static async getProductsTerlaris(req, res) {
+    try {
+      const response = await ProdukService.getProdukTerlaris();
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
     }
   }
 
@@ -20,7 +28,7 @@ class ProductController {
       const response = await ProdukService.getProdukById(id);
       return res.json(response);
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
   }
 
@@ -34,7 +42,7 @@ class ProductController {
       await ProdukService.saveProduk(data, file);
       return res.status(201).json({ msg: "Product created successfully" });
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
   }
 
@@ -49,7 +57,7 @@ class ProductController {
       await ProdukService.updateProduk(id, data, file);
       return res.status(200).json({ msg: "updated successfuly" });
     } catch (error) {
-      return res.status(error.code).json(error.message);
+      return res.status(500).json(error.message);
     }
   }
 
@@ -61,7 +69,7 @@ class ProductController {
       await ProdukService.deleteProduk(id, product.image);
       return res.status(200).json({ msg: "product deleted successfully" });
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
   }
 }

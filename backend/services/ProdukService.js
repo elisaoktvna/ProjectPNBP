@@ -1,13 +1,45 @@
+import { Sequelize } from "sequelize"; // Pastikan sequelize diimport
+
 import Kategori from "../models/KategoriModel.js";
 import Produk from "../models/ProductModel.js";
+import TransactionDetail from "../models/TransactionDetailModel.js";
 import FileService from "./FileService.js";
 
 class ProdukService {
   static async getProdukAll() {
     const response = await Produk.findAll({
-      include: Kategori,
+      include: {
+        model: Kategori,
+      },
       order: [["id", "DESC"]],
     });
+    return response;
+  }
+  static async getProdukTerlaris() {
+    const response = await Produk.findAll({
+      include: [
+        {
+          model: Kategori,
+          required: true, // Menyertakan kategori jika ada
+        },
+        {
+          model: TransactionDetail, // Menyertakan detail transaksi
+          attributes: [], // Kita tidak membutuhkan kolom dari TransactionDetail secara langsung
+          required: true, // Hanya produk yang terjual
+        },
+      ],
+      attributes: [
+        "name", // Nama produk
+        "price", // Harga produk
+        [
+          Sequelize.fn("SUM", Sequelize.col("TransactionDetails.qty")),
+          "totalTerjual", // Total kuantitas yang terjual
+        ],
+      ],
+      group: ["products.id", "categoryId"], // Mengelompokkan berdasarkan Produk dan Kategori
+      order: [[Sequelize.literal("totalTerjual"), "DESC"]], // Mengurutkan berdasarkan total terjual (terbesar)
+    });
+
     return response;
   }
 
