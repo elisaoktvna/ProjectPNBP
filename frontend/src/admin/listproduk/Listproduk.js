@@ -1,4 +1,6 @@
 import React from 'react'
+import Add from "./Addproduk";
+
 import Layout from '../../components/Layout'
 import {Link} from "react-router-dom"
 
@@ -10,6 +12,7 @@ const Listproduk = () => {
             <h1 className='font-semibold'>List Produk</h1>
             <p className='text-slate-500'>Berikut Adalah Tabel untuk produk yang tersedia</p>
         </div>
+       
     </div>
     <table className='border w-full'>
               <thead>
