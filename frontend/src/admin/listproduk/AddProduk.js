@@ -4,56 +4,47 @@ import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 
-const AddProduk = () => {
+const Add = () => {
   const [Show, setShow] = useState(false);
   const { setReload, reload } = useGlobalContext();
   const onSubmit = async (e) => {
     e.preventDefault();
-    const { name, image, stock, price, category } = e.target;
+    const { name, image } = e.target;
     const nameVal = name.value;
     const imageVal = image.files[0];
-    const stockVal = stock.value;
-    const priceVal = price.value;
-    const categoryVal = category.value;
-
     const formData = new FormData();
-    formData.append("name", nameVal);
-    formData.append("image", imageVal);
-    formData.append("stock", stockVal);
-    formData.append("price", priceVal);
-    formData.append("category", categoryVal);
-
+    formData.append("title", nameVal);
+    formData.append("file", imageVal);
     try {
-      await fetch(process.env.REACT_APP_BASE_URL + "/produk", {
+      await fetch(process.env.REACT_APP_BASE_URL + "/kategori", {
         method: "POST",
         body: formData,
       });
       setShow(false);
       e.target.reset();
       setReload(!reload);
-      toast.success("Produk berhasil ditambahkan");
+      toast.success("Kategori berhasil ditambahkan");
     } catch (error) {
-      toast.error("Produk gagal ditambahkan");
+      toast.error("Kategori gagal ditambahkan");
     }
   };
-
   return (
     <>
       <button
         className="ms-auto bg-[#FFC200] hover:bg-[#FFC200]/70 px-5 py-2 text-sm text-white rounded-full"
         onClick={() => setShow(true)}
       >
-        Tambah Produk
+        Tambah Kategori
       </button>
       <Modal
-        title={"Tambah Produk"}
+        title={"Tambah Kategori"}
         show={Show}
         onClose={(val) => setShow(val)}
       >
         <form onSubmit={onSubmit}>
           <div className="form-group mb-2">
             <label htmlFor="name" className="text-sm inline-block mb-1">
-              Nama Produk
+              Nama
             </label>
             <input
               required
@@ -61,51 +52,12 @@ const AddProduk = () => {
               name="name"
               id="name"
               className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Nama Produk"
-            />
-          </div>
-          <div className="form-group mb-2">
-            <label htmlFor="stock" className="text-sm inline-block mb-1">
-              Stok Produk
-            </label>
-            <input
-              required
-              type="number"
-              name="stock"
-              id="stock"
-              className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Jumlah Stok"
-            />
-          </div>
-          <div className="form-group mb-2">
-            <label htmlFor="price" className="text-sm inline-block mb-1">
-              Harga Produk
-            </label>
-            <input
-              required
-              type="number"
-              name="price"
-              id="price"
-              className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Harga Produk"
-            />
-          </div>
-          <div className="form-group mb-2">
-            <label htmlFor="category" className="text-sm inline-block mb-1">
-              Kategori Produk
-            </label>
-            <input
-              required
-              type="text"
-              name="category"
-              id="category"
-              className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Kategori Produk"
+              placeholder="Nama Kategori"
             />
           </div>
           <div className="form-group">
             <label htmlFor="image" className="text-sm inline-block mb-1">
-              Gambar Produk
+              Gambar
             </label>
             <input
               required
@@ -136,4 +88,4 @@ const AddProduk = () => {
   );
 };
 
-export default AddProduk;
+export default Add;
