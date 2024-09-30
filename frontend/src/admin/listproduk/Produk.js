@@ -1,11 +1,14 @@
 import React from "react";
 import Layout from "../../components/Layout";
 import AddProduk from "./Addproduk";
+import UpdateProduk from "./UpdateProduk";
+import DeleteProduk from "./DeleteProduk";
 import { useFetch } from "../../hooks/useFetch";
 import { formatRupiah } from "../../helpers/currency";
 
 const Produk = () => {
   const { data: produks } = useFetch("/produk");
+
   const backendURL = process.env.REACT_APP_BASE_URL;
 
   return (
@@ -74,7 +77,7 @@ const Produk = () => {
               </td>
             </tr>
           )}
-          {produks.map((produk, i) => {
+          {produks?.map((produk, i) => {
             return (
               <tr key={i}>
                 <td className="border-b py-4 p-2" align="middle">
@@ -94,12 +97,9 @@ const Produk = () => {
                 <td className="border-b py-4">{produk.name}</td>
                 <td className="border-b py-4">{produk.stock}</td>
                 <td className="border-b py-4">{formatRupiah(produk.price)}</td>
-                <td className="border-b py-4">{produk.kategori?.name}</td>
+                <td className="border-b py-4">{produk.category?.name}</td>
                 <td className="border-b py-4">
-                  <UpdateProduk
-                    id={produk.id}
-                    data={{ name: produk.name, image: produk.image }}
-                  />
+                  <UpdateProduk id={produk.id} data={{ ...produk }} />
                   <DeleteProduk id={produk.id} nama={produk.name} />
                 </td>
               </tr>

@@ -49,7 +49,7 @@ class ProductController {
   static async updateProduct(req, res) {
     const id = req.params.id;
     const data = req.body;
-    const file = req.files.file;
+    const file = req?.files?.file;
 
     const product = await ProdukService.getProdukById(id);
     if (!product) return res.status(404).json({ msg: "no data found" });
@@ -57,6 +57,8 @@ class ProductController {
       await ProdukService.updateProduk(id, data, file);
       return res.status(200).json({ msg: "updated successfuly" });
     } catch (error) {
+      console.log(error);
+
       return res.status(500).json(error.message);
     }
   }

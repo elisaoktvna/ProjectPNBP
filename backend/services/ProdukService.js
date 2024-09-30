@@ -58,7 +58,7 @@ class ProdukService {
     const allowedType = [".png", ".jpg", ".jpeg"];
     const resFile = await FileService.saveFile(file, allowedType, 5000000);
     console.log(resFile);
-    
+
     const { fileName, url } = resFile;
     const result = await Produk.create({
       ...data,
@@ -73,7 +73,8 @@ class ProdukService {
     const produk = await this.getProdukById(id);
     let fileName = "";
     let url = "";
-    if (files === null) {
+
+    if (!files) {
       fileName = produk.image;
       url = produk.url;
     } else {
@@ -82,7 +83,6 @@ class ProdukService {
       const data = await FileService.saveFile(file, allowedType, 5000000);
       fileName = data?.fileName;
       url = data?.url;
-
       FileService.removeFile(produk.image);
     }
 

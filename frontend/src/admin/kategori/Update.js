@@ -69,7 +69,10 @@ const Update = ({ id, data }) => {
               id="image"
               className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
             /> */}
-            <FileInput name={"image"} url={data?.url} />
+            <FileInput
+              name={"image"}
+              url={process.env.REACT_APP_BASE_URL + "/images/" + data.image}
+            />
           </div>
           <div className="mt-5 flex justify-end items-center">
             <button

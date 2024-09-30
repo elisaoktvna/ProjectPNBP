@@ -35,7 +35,7 @@ const Sidebar = () => {
               class={`${
                 pathname == "/dashboard"
                   ? "bg-[#FFC200] text-white"
-                  : "hover:bg-gray-300"
+                  : "hover:bg-[#FFC200]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               <div className="me-2 fa fa-home"></div> Home
@@ -47,7 +47,7 @@ const Sidebar = () => {
               class={`${
                 pathname == "/listproduk"
                   ? "bg-[#FFC200] text-white"
-                  : "hover:bg-gray-300"
+                  : "hover:bg-[#FFC200]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               <div className="me-2 fa fa-box-open"></div> List Produk
@@ -59,7 +59,7 @@ const Sidebar = () => {
               class={`${
                 pathname == "/kategori"
                   ? "bg-[#FFC200] text-white"
-                  : "hover:bg-gray-300"
+                  : "hover:bg-[#FFC200]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               <i className="me-2 fa fa-list"></i> Kategori
@@ -71,7 +71,7 @@ const Sidebar = () => {
               class={`${
                 pathname == "/produk-terlaris"
                   ? "bg-[#FFC200] text-white"
-                  : "hover:bg-gray-300"
+                  : "hover:bg-[#FFC200]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               Produk Terlaris
