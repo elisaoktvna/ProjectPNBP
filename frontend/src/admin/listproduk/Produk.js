@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { formatRupiah } from "../../helpers/currency";
 
-
 const Produk = () => {
   const { data: produks } = useFetch("/produk");
   return (
@@ -90,7 +89,7 @@ const Produk = () => {
                 <td className="border-b py-4">{produk.name}</td>
                 <td className="border-b py-4">{produk.stock}</td>
                 <td className="border-b py-4">{formatRupiah(produk.price)}</td>
-                <td className="border-b py-4">{produk.kategori?.name}</td>
+                <td className="border-b py-4">{produk?.category?.name}</td>
                 <td className="border-b py-4">
                   {/* <Update
                     id={kategori.id}

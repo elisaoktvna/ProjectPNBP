@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { formatRupiah } from "../../helpers/currency";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -121,7 +122,7 @@ const Dashboard = () => {
               <thead>
                 <tr>
                   <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">
-                    No
+                    Nogiht
                   </th>
                   <th className="py-2 px-4 border-b border-gray-200 text-left text-sm font-semibold text-gray-700">
                     Nama Produk
@@ -147,7 +148,7 @@ const Dashboard = () => {
                       {pt.totalTerjual}
                     </td>
                     <td className="py-2 px-4 border-b border-gray-200">
-                      {pt.price}
+                      {formatRupiah(pt.price)}
                     </td>
                   </tr>
                 ))}
@@ -159,7 +160,14 @@ const Dashboard = () => {
             <h2 className="text-xl font-bold text-gray-700 mb-4">
               Keuntungan Bulanan
             </h2>
-            <Bar data={formattedChartData} options={options} height={100} />
+            <div className="h-full">
+              <Bar
+                data={formattedChartData}
+                options={options}
+                height={100}
+                className="!h-[300px]"
+              />
+            </div>
           </div>
         </div>
       </div>
