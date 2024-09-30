@@ -12,7 +12,7 @@ const Laporan = () => {
           <h1 className="font-semibold">Laporan Keuangan Bulanan</h1>
           <Filter />
         </div>
-        <h1 className="font-semibold">
+        <h1 className="font-semibold mb-4">
           Jember, Jawa Timur,
           <br />
           Indonesia
