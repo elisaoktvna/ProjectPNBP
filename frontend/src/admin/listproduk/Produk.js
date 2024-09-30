@@ -1,12 +1,13 @@
 import React from "react";
 import Layout from "../../components/Layout";
-import AddProduk from "./AddProduk";
-import { Link } from "react-router-dom";
+import AddProduk from "./Addproduk";
 import { useFetch } from "../../hooks/useFetch";
 import { formatRupiah } from "../../helpers/currency";
 
 const Produk = () => {
   const { data: produks } = useFetch("/produk");
+  const backendURL = process.env.REACT_APP_BASE_URL;
+
   return (
     <Layout>
       <div className="mb-6 flex items-center ">
@@ -63,39 +64,43 @@ const Produk = () => {
           </tr>
         </thead>
         <tbody>
-          {produks.length == 0 && (
+          {produks.length === 0 && (
             <tr>
               <td
                 className="border-b py-4 text-center text-slate-500"
-                colSpan={"4"}
+                colSpan={"7"}
               >
-                Data kategori tidak ada
+                Data produk tidak ada
               </td>
             </tr>
           )}
           {produks.map((produk, i) => {
             return (
               <tr key={i}>
-                <td className="border-b py-4  p-2" align="middle">
+                <td className="border-b py-4 p-2" align="middle">
                   {i + 1}
                 </td>
                 <td className="border-b py-4">
                   <img
-                    src={produk.image}
+                    src={
+                      produk.image
+                        ? `${backendURL}/images/${produk.image}`
+                        : `${backendURL}/images/default-image.jpg`
+                    }
                     className="w-[50px] h-[50px] bg-[#FFC200] rounded-md"
-                    alt=""
+                    alt={produk.name || "Produk"}
                   />
                 </td>
                 <td className="border-b py-4">{produk.name}</td>
                 <td className="border-b py-4">{produk.stock}</td>
                 <td className="border-b py-4">{formatRupiah(produk.price)}</td>
-                <td className="border-b py-4">{produk?.category?.name}</td>
+                <td className="border-b py-4">{produk.kategori?.name}</td>
                 <td className="border-b py-4">
-                  {/* <Update
-                    id={kategori.id}
-                    data={{ name: kategori.name, url: kategori.url }}
+                  <UpdateProduk
+                    id={produk.id}
+                    data={{ name: produk.name, image: produk.image }}
                   />
-                  <Delete id={kategori.id} nama={kategori.name} /> */}
+                  <DeleteProduk id={produk.id} nama={produk.name} />
                 </td>
               </tr>
             );
