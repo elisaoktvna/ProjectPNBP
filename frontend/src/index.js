@@ -12,6 +12,7 @@ const Kategori = lazy(() => import("./admin/kategori/Kategori.js"));
 const Listproduk = lazy(() => import("./admin/listproduk/Listproduk.js"));
 const Produk = lazy(() => import("./admin/listproduk/Produk.js"));
 const Dashboard = lazy(() => import("./admin/dashboard/Dashboard.js"));
+const Laporan = lazy(() => import("./admin/laporan/Laporan.jsx"));
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -26,6 +27,7 @@ root.render(
           <Route path="/kategori" element={<Kategori />} />
           <Route path="/listproduk" element={<Produk />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/laporan" element={<Laporan />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

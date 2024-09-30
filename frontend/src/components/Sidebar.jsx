@@ -67,14 +67,14 @@ const Sidebar = () => {
           </li>
           <li class="mb-2">
             <Link
-              to={"/produk-terlaris"}
+              to={"/laporan"}
               class={`${
-                pathname == "/produk-terlaris"
+                pathname == "/laporan"
                   ? "bg-[#FFC200] text-white"
                   : "hover:bg-[#FFC200]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
-              Produk Terlaris
+              <i className="me-2 fa fa-chart-line"></i> Keuangan
             </Link>
           </li>
         </ul>
