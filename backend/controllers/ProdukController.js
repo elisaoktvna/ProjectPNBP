@@ -10,7 +10,7 @@ class ProductController {
       const response = await ProdukService.getProdukAll();
       return res.json(response);
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
   }
 
