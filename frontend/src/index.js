@@ -6,6 +6,7 @@ import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GlobalContextProvider } from "./contexts/GlobalContext.js";
 import Loading from "./components/Loading";
+import Login from "./auth/Login.jsx";
 
 // Lazy load the components
 const Kategori = lazy(() => import("./admin/kategori/Kategori.js"));
@@ -28,6 +29,7 @@ root.render(
           <Route path="/listproduk" element={<Produk />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/laporan" element={<Laporan />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

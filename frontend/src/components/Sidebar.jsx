@@ -34,8 +34,8 @@ const Sidebar = () => {
               to={"/dashboard"}
               class={`${
                 pathname == "/dashboard"
-                  ? "bg-[#FFC200] text-white"
-                  : "hover:bg-[#FFC200]/20 text-slate-600"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               <div className="me-2 fa fa-home"></div> Home
@@ -46,8 +46,8 @@ const Sidebar = () => {
               to={"/listproduk"}
               class={`${
                 pathname == "/listproduk"
-                  ? "bg-[#FFC200] text-white"
-                  : "hover:bg-[#FFC200]/20 text-slate-600"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               <div className="me-2 fa fa-box-open"></div> List Produk
@@ -58,8 +58,8 @@ const Sidebar = () => {
               to={"/kategori"}
               class={`${
                 pathname == "/kategori"
-                  ? "bg-[#FFC200] text-white"
-                  : "hover:bg-[#FFC200]/20 text-slate-600"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               <i className="me-2 fa fa-list"></i> Kategori
@@ -67,11 +67,23 @@ const Sidebar = () => {
           </li>
           <li class="mb-2">
             <Link
+              to={"/users"}
+              class={`${
+                pathname == "/users"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <i className="me-2 fa fa-users"></i> Pengguna
+            </Link>
+          </li>
+          <li class="mb-2">
+            <Link
               to={"/laporan"}
               class={`${
                 pathname == "/laporan"
-                  ? "bg-[#FFC200] text-white"
-                  : "hover:bg-[#FFC200]/20 text-slate-600"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
               <i className="me-2 fa fa-chart-line"></i> Keuangan

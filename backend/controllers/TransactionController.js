@@ -35,6 +35,15 @@ class TransactionController {
       return res.status(500).json({ msg: error.message });
     }
   }
+  static async getHistory(req, res) {
+    try {
+      const { startDate, endDate } = req.query;
+      const response = await TransactionService.getHistory(startDate, endDate);
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  }
 }
 
 export default TransactionController;
