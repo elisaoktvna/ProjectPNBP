@@ -4,14 +4,6 @@ import db from "../config/Database.js";
 const Users = db.define(
   "users",
   {
-    uuid: {
-      type: DataTypes.STRING,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -20,7 +12,7 @@ const Users = db.define(
         len: [3, 100],
       },
     },
-    username: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -36,7 +28,8 @@ const Users = db.define(
       },
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM,
+      values: ["admin", "karyawan"], // Define your roles here
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -49,3 +42,7 @@ const Users = db.define(
 );
 
 export default Users;
+
+(async () => {
+  await db.sync();
+})();

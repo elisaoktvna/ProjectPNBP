@@ -1,17 +1,7 @@
 import User from "../models/UserModel.js";
-import argon2 from "argon2";
 import UserService from "./../services/UserService.js";
 
 class UserController {
-  static async login(req, res) {
-    const data = req.body;
-    try {
-      const response = await UserService.login(data);
-      return res.status(200).json(response);
-    } catch (error) {
-      res.status(500).json({ msg: error.message });
-    }
-  }
   static async getUser(req, res) {
     try {
       const response = await UserService.getUserAll();
