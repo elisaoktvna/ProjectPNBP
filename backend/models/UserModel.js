@@ -15,9 +15,19 @@ const Users = db.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true, // Ensuring email is unique
       validate: {
         notEmpty: true,
         len: [3, 30],
+      },
+    },
+    pin: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true, // Ensuring pin is unique
+      validate: {
+        notEmpty: true,
+        len: [0, 6],
       },
     },
     password: {
@@ -29,11 +39,19 @@ const Users = db.define(
     },
     role: {
       type: DataTypes.ENUM,
-      values: ["admin", "karyawan"], // Define your roles here
+      values: ["admin", "karyawan"],
       allowNull: false,
       validate: {
         notEmpty: true,
       },
+    },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    token_exp: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {

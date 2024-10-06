@@ -8,12 +8,14 @@ import { GlobalContextProvider } from "./contexts/GlobalContext.js";
 import Loading from "./components/Loading";
 import Login from "./auth/Login.jsx";
 import Protected from "./Protected.js";
+import ResetPassword from "./auth/ResetPassword.jsx";
 
 // Lazy load the components
 const Kategori = lazy(() => import("./admin/kategori/Kategori.js"));
 const Produk = lazy(() => import("./admin/listproduk/Produk.js"));
 const Dashboard = lazy(() => import("./admin/dashboard/Dashboard.js"));
 const Laporan = lazy(() => import("./admin/laporan/Laporan.jsx"));
+const ForgetPassword = lazy(() => import("./auth/ForgetPassword.jsx"));
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -57,6 +59,8 @@ root.render(
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

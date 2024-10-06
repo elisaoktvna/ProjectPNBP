@@ -1,29 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { z } from "zod";
 import { setLocalStorage } from "../helpers/localStorage";
+import toast from "react-hot-toast";
+
+// Define Zod schema for login validation
+const loginSchema = z.object({
+  email: z.string().email("Email is not valid"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+});
 
 const Login = () => {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+
   const handleLogin = async (e) => {
     e.preventDefault();
     const data = e.target;
     const email = data.email.value;
     const password = data.password.value;
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", password);
+
+    // Perform validation with Zod
+    const formData = { email, password };
+    const validation = loginSchema.safeParse(formData);
+
+    if (!validation.success) {
+      // Format the errors to be easier to display
+      const errorMessages = validation.error.format();
+      setErrors({
+        email: errorMessages.email?._errors[0],
+        password: errorMessages.password?._errors[0],
+      });
+      return;
+    }
+
+    // Clear errors if valid
+    setErrors({});
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("email", email);
+    formDataToSend.append("password", password);
+
     try {
       const res = await fetch(process.env.REACT_APP_BASE_URL + "/login", {
         method: "POST",
-        body: formData,
+        body: formDataToSend,
       });
       const dataRes = await res.json();
-      setLocalStorage("site", dataRes.token);
-      navigate("/dashboard");
+      if (res.status == 200) {
+        setLocalStorage("site", dataRes.token);
+        navigate("/dashboard");
+      } else {
+        toast.error("User tidak ditemukan");
+      }
     } catch (error) {
-      console.log(error.message);
+      toast.error("Login gagal");
     }
   };
+
   return (
     <div className="flex justify-center items-center min-h-screen ">
       <div className="bg-white md:w-[820px] w-full rounded-md overflow-hidden shadow-lg ">
@@ -37,10 +71,13 @@ const Login = () => {
               <input
                 type="email"
                 placeholder="Masukkan email"
-                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm "
+                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
                 name="email"
                 id="email"
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
             <div className="mb-2">
               <label htmlFor="password" className="text-sm mb-2 inline-block">
@@ -49,10 +86,13 @@ const Login = () => {
               <input
                 placeholder="Masukkan kata sandi"
                 type="password"
-                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm "
+                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
                 name="password"
                 id="password"
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
             <Link
               to={"/forget-password"}
