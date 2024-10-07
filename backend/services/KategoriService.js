@@ -33,7 +33,7 @@ class KategoriService {
     const kategori = await this.getKategoriById(id);
     let fileName = "";
     let url = "";
-    if (files === null) {
+    if (!files) {
       fileName = kategori.image;
       url = kategori.url;
     } else {

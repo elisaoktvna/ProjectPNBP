@@ -9,6 +9,7 @@ import ProdukRoute from "./routes/ProdukRoute.js";
 import TransactionRoute from "./routes/TransactionRoute.js";
 import "./associations.js";
 import UserRoute from "./routes/UserRoute.js";
+import AuthRoute from "./routes/AuthRoute.js";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: "*",
   })
 );
 
@@ -46,5 +47,6 @@ app.use(KategoriRoute);
 app.use(TransactionRoute);
 app.use(ProdukRoute);
 app.use(UserRoute);
+app.use(AuthRoute);
 // app.listen(5000, "10.10.184.250");
 app.listen(5000, () => console.log("server up and running..."));

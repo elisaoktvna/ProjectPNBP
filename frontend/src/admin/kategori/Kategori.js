@@ -64,7 +64,11 @@ const Kategori = () => {
                 </td>
                 <td className="border-b py-4">
                   <img
-                    src={kategori.url}
+                    src={
+                      process.env.REACT_APP_BASE_URL +
+                      "/images/" +
+                      kategori.image
+                    }
                     className="w-[50px] h-[50px] bg-[#FFC200] rounded-md"
                     alt=""
                   />

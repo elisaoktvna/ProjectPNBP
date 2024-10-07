@@ -1,13 +1,45 @@
+import { Sequelize } from "sequelize"; // Pastikan sequelize diimport
+
 import Kategori from "../models/KategoriModel.js";
 import Produk from "../models/ProductModel.js";
+import TransactionDetail from "../models/TransactionDetailModel.js";
 import FileService from "./FileService.js";
 
 class ProdukService {
   static async getProdukAll() {
     const response = await Produk.findAll({
-      include: Kategori,
+      include: {
+        model: Kategori,
+      },
       order: [["id", "DESC"]],
     });
+    return response;
+  }
+  static async getProdukTerlaris() {
+    const response = await Produk.findAll({
+      include: [
+        {
+          model: Kategori,
+          required: true, // Menyertakan kategori jika ada
+        },
+        {
+          model: TransactionDetail, // Menyertakan detail transaksi
+          attributes: [], // Kita tidak membutuhkan kolom dari TransactionDetail secara langsung
+          required: true, // Hanya produk yang terjual
+        },
+      ],
+      attributes: [
+        "name", // Nama produk
+        "price", // Harga produk
+        [
+          Sequelize.fn("SUM", Sequelize.col("TransactionDetails.qty")),
+          "totalTerjual", // Total kuantitas yang terjual
+        ],
+      ],
+      group: ["products.id", "categoryId"], // Mengelompokkan berdasarkan Produk dan Kategori
+      order: [[Sequelize.literal("totalTerjual"), "DESC"]], // Mengurutkan berdasarkan total terjual (terbesar)
+    });
+
     return response;
   }
 
@@ -25,7 +57,9 @@ class ProdukService {
   static async saveProduk(data, file) {
     const allowedType = [".png", ".jpg", ".jpeg"];
     const resFile = await FileService.saveFile(file, allowedType, 5000000);
-    const { fileName, url } = resFile.data;
+    console.log(resFile);
+
+    const { fileName, url } = resFile;
     const result = await Produk.create({
       ...data,
       image: fileName,
@@ -39,7 +73,8 @@ class ProdukService {
     const produk = await this.getProdukById(id);
     let fileName = "";
     let url = "";
-    if (files === null) {
+
+    if (!files) {
       fileName = produk.image;
       url = produk.url;
     } else {
@@ -48,7 +83,6 @@ class ProdukService {
       const data = await FileService.saveFile(file, allowedType, 5000000);
       fileName = data?.fileName;
       url = data?.url;
-
       FileService.removeFile(produk.image);
     }
 

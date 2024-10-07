@@ -1,59 +1,56 @@
 import { CustomError } from "../helpers/CustomError.js";
-import Kategori from "../models/KategoriModel.js";
 import User from "../models/UserModel.js";
-import FileService from "./FileService.js";
 import argon2 from "argon2";
 
 class UserService {
-  static async login(data) {
-    const { username, password } = data;
-    const user = await User.findOne({
-      where: {
-        username: username,
-      },
-      order: [["id", "DESC"]],
-    });
-    if (!user || !(await argon2.verify(user.password, password))) {
-      throw new CustomError("User tidak ditemukan", 400);
-    }
-
-    return user;
-  }
   static async getUserAll() {
     const response = await User.findAll({
-      attributes: ["id", "uuid", "name", "username", "role"],
+      attributes: ["id", "email", "name", "role"],
     });
     return response;
   }
 
   static async getUserById(id) {
-    const produk = await User.findOne({
+    const user = await User.findOne({
       where: {
         id,
       },
-      attributes: ["id", "uuid", "name", "username", "role"],
+      attributes: ["id", "email", "name", "role"],
     });
-
-    return produk;
+    if (!user) {
+      throw new CustomError("User tidak ditemukan", 404);
+    }
+    return user;
   }
 
   static async saveUser(data) {
+    const user = await User.findOne({ where: { email: data.email } });
+    if (user) {
+      throw new CustomError(
+        "User dengan email " + data.email + " sudah ada",
+        409
+      );
+    }
     const hashPassword = await argon2.hash(data.password);
-    const user = await User.create({
+    return await User.create({
       name: data.name,
-      username: data.username,
+      email: data.email,
       password: hashPassword,
       role: data.role,
+      pin: Math.floor(100000 + Math.random() * 900000).toString(),
     });
-    return user;
   }
 
   static async updateUser(id, data) {
     const hashPassword = await argon2.hash(data.password);
-    const user = await User.update(
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
+      throw new CustomError("User tidak ditemukan", 404);
+    }
+    return await User.update(
       {
         name: data.name,
-        username: data.username,
+        email: data.email,
         password: hashPassword,
         role: data.role,
       },
@@ -63,15 +60,17 @@ class UserService {
         },
       }
     );
-    return user;
   }
   static async deleteUser(id) {
-    const data = await User.destroy({
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
+      throw new CustomError("User tidak ditemukan", 404);
+    }
+    return await User.destroy({
       where: {
         id,
       },
     });
-    return data;
   }
 }
 

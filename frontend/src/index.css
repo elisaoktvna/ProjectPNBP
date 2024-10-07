@@ -28,3 +28,7 @@
     opacity: 1;
   }
 }
+
+:where(input, textarea) {
+  @apply outline-[#FFC200];
+}

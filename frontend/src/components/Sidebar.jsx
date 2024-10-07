@@ -1,53 +1,106 @@
-import React from 'react'
+import React from "react";
 import Polije from "../asset/polije.png";
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
+import { setLocalStorage } from "../helpers/localStorage";
 const Sidebar = () => {
-  return (
-    
-    <div class="w-64 bg-white rounded-lg text-black flex flex-col h-100%">
+  const { pathname } = useLocation();
+  const { data: user } = useFetch("/auth/user");
+  const navigate = useNavigate();
+  const logout = async () => {
+    setLocalStorage("site", null);
+    navigate("/login");
+  };
+  console.log(user);
 
-        <div className="flex justify-center gap-2">
-            <div className="w-20 h-full ">
-              <img className="w-full h-full pt-10 " src={Polije} alt="polije" />
-            </div>
-            
+  return (
+    <div className="w-64 bg-white rounded-lg text-black flex flex-col h-100%">
+      <div className="flex justify-center gap-2">
+        <div className="w-20 h-full ">
+          <img className="w-full h-full pt-10 " src={Polije} alt="polije" />
         </div>
-        {/* <div className="flex  2xl:flex-col justify-between items-center 2xl:items-start w-full mt-3 gap-3">
-            <div className="flex flex-col justify-center items-center">
-              <h3 className="text-[15px] md:text-[18px] text-orange-800 font-bold lg:text-[16px] w-full2xl:w-full whitespace-nowrap text-ellipsis overflow-hidden">
-                Projek PNBP
-              </h3>
-              <p className="text-[#535353] text-sm">Administrator</p>
-            </div>
-          </div> */}
+      </div>
+
       <div className="flex justify-center flex-col items-center mt-4">
         <h3 className="text-[15px] md:text-[18px] text-orange-800 font-bold lg:text-[16px] w-full2xl:w-full whitespace-nowrap text-ellipsis overflow-hidden">
-                Projek PNBP
-              </h3>
-              <p className="text-[#535353] text-sm">Administrator</p>
+          Projek PNBP
+        </h3>
+        <h2 className="mt-3">{user?.name}</h2>
+        <p className="text-[#535353] text-sm">{user?.role}</p>
       </div>
-        <nav class="flex-1 px-4 py-6">
-            <ul>
-                <li class="mb-2">
-                    <Link to={"/Dashboard"} class="block px-4 py-2 rounded hover:bg-gray-300">Home</Link>
-                </li>
-                <li class="mb-2">
-                    <Link to={"/listproduk"} class="block px-4 py-2 rounded hover:bg-gray-300">List Produk</Link>
-                </li>
-                <li class="mb-2">
-                    <Link to={"/kategori"} class="block px-4 py-2 rounded hover:bg-gray-300">Kategori</Link>
-                </li>
-                <li class="mb-2">
-                <Link to={"/usermenu"} class="block px-4 py-2 rounded hover:bg-gray-300">User</Link>
-                </li>
-            </ul>
-        </nav>
-    </div>
+      <nav className="flex-1 px-4 py-6 flex flex-col justify-between">
+        <ul>
+          <li className="mb-2">
+            <Link
+              to={"/dashboard"}
+              className={`${
+                pathname == "/dashboard"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <div className="me-2 fa fa-home"></div> Home
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link
+              to={"/listproduk"}
+              className={`${
+                pathname == "/listproduk"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <div className="me-2 fa fa-box-open"></div> List Produk
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link
+              to={"/kategori"}
+              className={`${
+                pathname == "/kategori"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <i className="me-2 fa fa-list"></i> Kategori
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link
+              to={"/users"}
+              className={`${
+                pathname == "/users"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <i className="me-2 fa fa-users"></i> Pengguna
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link
+              to={"/laporan"}
+              className={`${
+                pathname == "/laporan"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <i className="me-2 fa fa-chart-line"></i> Keuangan
+            </Link>
+          </li>
+        </ul>
 
-    
-  
-); 
-  
+        <button
+          onClick={logout}
+          className="text-white text-sm  px-4 rounded-full hover:bg-[#F65454]/70 bg-[#F65454] py-2"
+        >
+          <div className="fa fa-right-from-bracket me-2"></div> Logout
+        </button>
+      </nav>
+    </div>
+  );
 };
 
 export default Sidebar;

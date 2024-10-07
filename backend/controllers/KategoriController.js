@@ -37,7 +37,7 @@ class KategoriController {
   static async updateKategori(req, res) {
     const name = req.body.title;
     const id = req.params.id;
-    const files = req.files;
+    const files = req?.files;
     const kategori = await KategoriService.getKategoriById(id);
     if (!kategori) return res.status(404).json({ msg: "no data found" });
 

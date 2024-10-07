@@ -1,8 +1,6 @@
-function CustomError(message, status = 200) {
-  const error = new Error(message);
-  error.code = status;
-  return error;
+export class CustomError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.status = statusCode;
+  }
 }
-
-CustomError.prototype = Object.create(Error.prototype);
-export { CustomError };

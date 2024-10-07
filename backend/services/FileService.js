@@ -10,7 +10,7 @@ class FileService {
     try {
       const fileSize = file?.data?.length || 0;
       const ext = path.extname(file?.name || "").toLowerCase();
-      const fileName = `${file?.md5 || Math.random() * 10}${ext}`;
+      const fileName = this.generateName(file, ext);
       const url = `http://localhost:5000/images/${fileName}`;
 
       if (!allowedType.includes(ext)) {
@@ -47,6 +47,13 @@ class FileService {
     const filepath = `./public/images/${fileName}`;
     if (fs.existsSync(filepath) && fileName) fs.unlinkSync(filepath);
   }
+  static generateName = (file, ext) => {
+    const timeStamp = Date.now(); // Current timestamp in milliseconds
+    const randomFactor = Math.floor(Math.random() * 10000); // Random number between 0 and 9999
+    const hash = file?.md5 || randomFactor; // Use MD5 if available, otherwise use the random factor
+    const fileName = `${hash}-${timeStamp}${ext}`; // Combine hash, timestamp, and extension
+    return fileName;
+  };
 }
 
 export default FileService;

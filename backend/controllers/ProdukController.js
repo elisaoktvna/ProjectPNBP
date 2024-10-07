@@ -10,7 +10,15 @@ class ProductController {
       const response = await ProdukService.getProdukAll();
       return res.json(response);
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
+    }
+  }
+  static async getProductsTerlaris(req, res) {
+    try {
+      const response = await ProdukService.getProdukTerlaris();
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
     }
   }
 
@@ -20,7 +28,7 @@ class ProductController {
       const response = await ProdukService.getProdukById(id);
       return res.json(response);
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
   }
 
@@ -34,14 +42,14 @@ class ProductController {
       await ProdukService.saveProduk(data, file);
       return res.status(201).json({ msg: "Product created successfully" });
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
   }
 
   static async updateProduct(req, res) {
     const id = req.params.id;
     const data = req.body;
-    const file = req.files.file;
+    const file = req?.files?.file;
 
     const product = await ProdukService.getProdukById(id);
     if (!product) return res.status(404).json({ msg: "no data found" });
@@ -49,7 +57,9 @@ class ProductController {
       await ProdukService.updateProduk(id, data, file);
       return res.status(200).json({ msg: "updated successfuly" });
     } catch (error) {
-      return res.status(error.code).json(error.message);
+      console.log(error);
+
+      return res.status(500).json(error.message);
     }
   }
 
@@ -61,7 +71,7 @@ class ProductController {
       await ProdukService.deleteProduk(id, product.image);
       return res.status(200).json({ msg: "product deleted successfully" });
     } catch (error) {
-      return res.status(error.code).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
   }
 }
