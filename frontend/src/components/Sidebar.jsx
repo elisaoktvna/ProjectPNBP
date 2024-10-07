@@ -38,7 +38,7 @@ const Sidebar = () => {
                     <Link to={"/kategori"} class="block px-4 py-2 rounded hover:bg-gray-300">Kategori</Link>
                 </li>
                 <li class="mb-2">
-                <Link to={"/"} class="block px-4 py-2 rounded hover:bg-gray-300">Produk Terlaris</Link>
+                <Link to={"/usermenu"} class="block px-4 py-2 rounded hover:bg-gray-300">User</Link>
                 </li>
             </ul>
         </nav>

@@ -9,7 +9,7 @@ import { GlobalContextProvider } from "./contexts/GlobalContext.js";
 import Listproduk from './admin/listproduk/Listproduk.js';
 import dashboard from './admin/dashboard/Dashboard.js';
 import Dashboard from "./admin/dashboard/Dashboard.js";
-
+import Usermenu from "./Usermenu/Usermenu.js";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <GlobalContextProvider>
@@ -21,6 +21,7 @@ root.render(
             <Route path="/kategori" element={ <Kategori/>} />
             <Route path="/listproduk" element={ <Listproduk/>} />
             <Route path="/dashboard" element={ <Dashboard/>} />
+            <Route path="/usermenu" element={ <Usermenu/>} />
         </Routes>
     </BrowserRouter>
   </GlobalContextProvider>
