@@ -1,53 +1,50 @@
 import React, { useState } from "react";
 import Modal from "../../components/Modal";
-import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 
-const UpdatePengguna = () => {
+const UpdatePengguna = ({ id, data }) => {
   const [Show, setShow] = useState(false);
   const { setReload, reload } = useGlobalContext();
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, username, password, role } = e.target;
+    const { name, email, role } = e.target;
     const nameVal = name.value;
     const emailVal = email.value;
-    const usernameVal = username.value;
-    const passwordVal = password.value;
     const roleVal = role.value;
 
     const formData = new FormData();
     formData.append("name", nameVal);
     formData.append("email", emailVal);
-    formData.append("username", usernameVal);
-    formData.append("password", passwordVal);
     formData.append("role", roleVal);
 
     try {
-      await fetch(process.env.REACT_APP_BASE_URL + "/pengguna", {
-        method: "POST",
+      const res = await fetch(process.env.REACT_APP_BASE_URL + "/users/" + id, {
+        method: "PUT",
         body: formData,
       });
+      console.log(await res.json());
+      
       setShow(false);
       e.target.reset();
       setReload(!reload);
-      toast.success("Pengguna berhasil ditambahkan");
+      toast.success("Pengguna berhasil diubah");
     } catch (error) {
-      toast.error("Pengguna gagal ditambahkan");
+      toast.error("Pengguna gagal diubah");
     }
   };
 
   return (
     <>
       <button
-        className="ms-auto bg-[#FFC200] hover:bg-[#FFC200]/70 px-5 py-2 text-sm text-white rounded-full"
+        className="text-white me-2 text-sm px-4 rounded-full hover:bg-green-500/70 bg-green-500 py-1"
         onClick={() => setShow(true)}
       >
-        Tambah Pengguna
+        Ubah
       </button>
       <Modal
-        title={"Tambah Pengguna"}
+        title={"Ubah Pengguna"}
         show={Show}
         onClose={(val) => setShow(val)}
       >
@@ -57,6 +54,7 @@ const UpdatePengguna = () => {
               Nama
             </label>
             <input
+              defaultValue={data?.name}
               required
               type="text"
               name="name"
@@ -70,6 +68,7 @@ const UpdatePengguna = () => {
               Email
             </label>
             <input
+              defaultValue={data?.email}
               required
               type="email"
               name="email"
@@ -79,49 +78,25 @@ const UpdatePengguna = () => {
             />
           </div>
           <div className="form-group mb-2">
-            <label htmlFor="username" className="text-sm inline-block mb-1">
-              Username
-            </label>
-            <input
-              required
-              type="text"
-              name="username"
-              id="username"
-              className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Username"
-            />
-          </div>
-          <div className="form-group mb-2">
-            <label htmlFor="password" className="text-sm inline-block mb-1">
-              Password
-            </label>
-            <input
-              required
-              type="password"
-              name="password"
-              id="password"
-              className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Password"
-            />
-          </div>
-          <div className="form-group mb-2">
             <label htmlFor="role" className="text-sm inline-block mb-1">
               Role
             </label>
             <select
-              required
               name="role"
               id="role"
+              required
+              defaultValue={data?.role || ""}
               className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Pilih Role
               </option>
               <option value="admin">Admin</option>
               <option value="karyawan">Karyawan</option>
             </select>
           </div>
-          <div className="mt-5 flex justify-end">
+
+          <div className="mt-5 flex justify-end items-center">
             <button
               type="submit"
               className="px-5 hover:bg-[#FFC200]/70 text-sm py-2 bg-[#FFC200] rounded-full text-white"

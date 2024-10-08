@@ -1,33 +1,53 @@
 import React, { useState } from "react";
 import Modal from "../../components/Modal";
-import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import { z } from "zod";
 
 const AddPengguna = () => {
   const [Show, setShow] = useState(false);
   const { setReload, reload } = useGlobalContext();
 
+  // Zod schema untuk validasi
+  const schema = z.object({
+    name: z.string().min(1, "Nama wajib diisi"),
+    email: z.string().email("Format email tidak valid"),
+    password: z.string().min(8, "Password minimal 8 karakter"),
+    role: z.string().min(1, "Role wajib dipilih"),
+  });
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, username, password, role } = e.target;
-    const nameVal = name.value;
-    const emailVal = email.value;
-    const usernameVal = username.value;
-    const passwordVal = password.value;
-    const roleVal = role.value;
+    const { name, email, password, role } = e.target;
+    const formData = {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      role: role.value,
+    };
 
-    const formData = new FormData();
-    formData.append("name", nameVal);
-    formData.append("email", emailVal);
-    formData.append("username", usernameVal);
-    formData.append("password", passwordVal);
-    formData.append("role", roleVal);
+    // Validasi dengan Zod
+    const result = schema.safeParse(formData);
+
+    if (!result.success) {
+      const firstError = result.error.errors[0];
+      toast.error(firstError.message);
+      return;
+    }
+
+    // Proses pengiriman jika validasi sukses
+    const validData = result.data;
 
     try {
-      await fetch(process.env.REACT_APP_BASE_URL + "/pengguna", {
+      const formBody = new FormData();
+      formBody.append("name", validData.name);
+      formBody.append("email", validData.email);
+      formBody.append("password", validData.password);
+      formBody.append("role", validData.role);
+
+      await fetch(process.env.REACT_APP_BASE_URL + "/users", {
         method: "POST",
-        body: formData,
+        body: formBody,
       });
       setShow(false);
       e.target.reset();
@@ -79,19 +99,6 @@ const AddPengguna = () => {
             />
           </div>
           <div className="form-group mb-2">
-            <label htmlFor="username" className="text-sm inline-block mb-1">
-              Username
-            </label>
-            <input
-              required
-              type="text"
-              name="username"
-              id="username"
-              className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Username"
-            />
-          </div>
-          <div className="form-group mb-2">
             <label htmlFor="password" className="text-sm inline-block mb-1">
               Password
             </label>
@@ -101,7 +108,7 @@ const AddPengguna = () => {
               name="password"
               id="password"
               className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-              placeholder="Password"
+              placeholder="Password (min 8 karakter)"
             />
           </div>
           <div className="form-group mb-2">

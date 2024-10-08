@@ -3,11 +3,13 @@ import Layout from "../../components/Layout";
 // import Add from "./Add";
 import { Link } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
-import AddPengguna from "./AddPengguna";
+import AddPengguna from "./AddPengguna.js";
+import UpdatePengguna from "./UpdatePengguna.js";
+import DeletePengguna from "./DeletePengguna.js";
 
 
 const Pengguna = () => {
-  // const { data: kategoris } = useFetch("/kategori");
+  const { data: {data:users} } = useFetch("/users");
   return (
     <Layout>
       <div className="mb-6 flex items-center ">
@@ -35,25 +37,13 @@ const Pengguna = () => {
               className="border-b py-4 text-slate-500 font-semibold"
               align="start"
             >
-              Username
-            </th>
-            {/* <th
-              className="border-b py-4 text-slate-500 font-semibold"
-              align="start"
-            >
-              Password
-            </th> */}
-            <th
-              className="border-b py-4 text-slate-500 font-semibold"
-              align="start"
-            >
-              email
+              Email
             </th>
             <th
               className="border-b py-4 text-slate-500 font-semibold"
               align="start"
             >
-              role
+              Role
             </th>
             <th
               className="border-b py-4 text-slate-500 w-[200px] font-semibold"
@@ -64,7 +54,7 @@ const Pengguna = () => {
           </tr>
         </thead>
         <tbody>
-          {/* {kategoris.length == 0 && (
+           {users?.length == 0 && (
             <tr>
               <td
                 className="border-b py-4 text-center text-slate-500"
@@ -73,35 +63,23 @@ const Pengguna = () => {
                 Data pengguna tidak ada
               </td>
             </tr>
-          )} */}
-          {/* {kategoris.map((kategori, i) => {
+          )} 
+           {users?.map((user, i) => {
             return (
               <tr key={i}>
                 <td className="border-b py-4  p-2" align="middle">
                   {i + 1}
                 </td>
-                <td className="border-b py-4">
-                  <img
-                    src={
-                      process.env.REACT_APP_BASE_URL +
-                      "/images/" +
-                      kategori.image
-                    }
-                    className="w-[50px] h-[50px] bg-[#FFC200] rounded-md"
-                    alt=""
-                  />
-                </td>
-                <td className="border-b py-4">{kategori.name}</td>
-                <td className="border-b py-4"> */}
-                  {/* <Update
-                    id={kategori.id}
-                    data={{ name: kategori.name, url: kategori.url }}
-                  />
-                  <Delete id={kategori.id} nama={kategori.name} /> */}
-                {/* </td>
+                <td className="border-b py-4">{user.name}</td>
+                <td className="border-b py-4">{user.email}</td>
+                <td className="border-b py-4">{user.role}</td>
+                <td className="border-b py-4"> 
+                <UpdatePengguna id={user.id} data={{...user}} />
+                <DeletePengguna id={user.id} nama={user.name} />
+                 </td>
               </tr>
             );
-          })} */}
+          })} 
         </tbody>
       </table>
     </Layout>

@@ -11,7 +11,7 @@ const DeletePengguna = ({ id, nama }) => {
     e.preventDefault();
 
     try {
-      await fetch(process.env.REACT_APP_BASE_URL + "/produk/" + id, {
+      await fetch(process.env.REACT_APP_BASE_URL + "/users/" + id, {
         method: "DELETE",
       });
       setShow(false);
@@ -32,7 +32,7 @@ const DeletePengguna = ({ id, nama }) => {
         Hapus
       </button>
       <Modal
-        title={"Hapus Produk"}
+        title={"Hapus Pengguna"}
         show={show}
         onClose={(val) => setShow(val)}
       >

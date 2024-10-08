@@ -11,7 +11,6 @@ const Sidebar = () => {
     setLocalStorage("site", null);
     navigate("/login");
   };
-  console.log(user);
 
   return (
     <div className="w-64 bg-white rounded-lg text-black flex flex-col h-100%">

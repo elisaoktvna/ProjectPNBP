@@ -42,16 +42,15 @@ class UserService {
   }
 
   static async updateUser(id, data) {
-    const hashPassword = await argon2.hash(data.password);
     const user = await User.findOne({ where: { id } });
     if (!user) {
       throw new CustomError("User tidak ditemukan", 404);
     }
+    
     return await User.update(
       {
         name: data.name,
         email: data.email,
-        password: hashPassword,
         role: data.role,
       },
       {
