@@ -9,6 +9,7 @@ import Loading from "./components/Loading";
 import Login from "./auth/Login.jsx";
 import Protected from "./Protected.js";
 import ResetPassword from "./auth/ResetPassword.jsx";
+import Usermenu from "./Usermenu/Usermenu.js";
 
 // Lazy load the components
 const Kategori = lazy(() => import("./admin/kategori/Kategori.js"));
@@ -61,6 +62,7 @@ root.render(
           <Route path="/login" element={<Login />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/" element={<Usermenu />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

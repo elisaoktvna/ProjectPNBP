@@ -14,7 +14,7 @@ const Sidebar = () => {
   console.log(user);
 
   return (
-    <div className="w-64 bg-white rounded-lg text-black flex flex-col h-100%">
+    <div className="w-64 sticky top-[50px] left-[10px] bg-white rounded-lg text-black flex flex-col h-100%">
       <div className="flex justify-center gap-2">
         <div className="w-20 h-full ">
           <img className="w-full h-full pt-10 " src={Polije} alt="polije" />
