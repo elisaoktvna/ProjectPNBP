@@ -1,38 +1,39 @@
 import React from "react";
 import Polije from "../asset/polije.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
+import { setLocalStorage } from "../helpers/localStorage";
 const Sidebar = () => {
   const { pathname } = useLocation();
+  const { data: user } = useFetch("/auth/user");
+  const navigate = useNavigate();
+  const logout = async () => {
+    setLocalStorage("site", null);
+    navigate("/login");
+  };
+  console.log(user);
 
   return (
-    <div class="w-64 bg-white rounded-lg text-black flex flex-col h-100%">
+    <div className="w-64 bg-white rounded-lg text-black flex flex-col h-100%">
       <div className="flex justify-center gap-2">
         <div className="w-20 h-full ">
           <img className="w-full h-full pt-10 " src={Polije} alt="polije" />
         </div>
       </div>
 
-      {/* <div className="flex  2xl:flex-col justify-between items-center 2xl:items-start w-full mt-3 gap-3">
-            <div className="flex flex-col justify-center items-center">
-              <h3 className="text-[15px] md:text-[18px] text-orange-800 font-bold lg:text-[16px] w-full2xl:w-full whitespace-nowrap text-ellipsis overflow-hidden">
-                Projek PNBP
-              </h3>
-              <p className="text-[#535353] text-sm">Administrator</p>
-            </div>
-          </div> */}
-
       <div className="flex justify-center flex-col items-center mt-4">
         <h3 className="text-[15px] md:text-[18px] text-orange-800 font-bold lg:text-[16px] w-full2xl:w-full whitespace-nowrap text-ellipsis overflow-hidden">
           Projek PNBP
         </h3>
-        <p className="text-[#535353] text-sm">Administrator</p>
+        <h2 className="mt-3">{user?.name}</h2>
+        <p className="text-[#535353] text-sm">{user?.role}</p>
       </div>
-      <nav class="flex-1 px-4 py-6">
+      <nav className="flex-1 px-4 py-6 flex flex-col justify-between">
         <ul>
-          <li class="mb-2">
+          <li className="mb-2">
             <Link
               to={"/dashboard"}
-              class={`${
+              className={`${
                 pathname == "/dashboard"
                   ? "bg-[#FF8E29] text-white"
                   : "hover:bg-[#FF8E29]/20 text-slate-600"
@@ -41,10 +42,10 @@ const Sidebar = () => {
               <div className="me-2 fa fa-home"></div> Home
             </Link>
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             <Link
               to={"/listproduk"}
-              class={`${
+              className={`${
                 pathname == "/listproduk"
                   ? "bg-[#FF8E29] text-white"
                   : "hover:bg-[#FF8E29]/20 text-slate-600"
@@ -53,10 +54,10 @@ const Sidebar = () => {
               <div className="me-2 fa fa-box-open"></div> List Produk
             </Link>
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             <Link
               to={"/kategori"}
-              class={`${
+              className={`${
                 pathname == "/kategori"
                   ? "bg-[#FF8E29] text-white"
                   : "hover:bg-[#FF8E29]/20 text-slate-600"
@@ -65,10 +66,10 @@ const Sidebar = () => {
               <i className="me-2 fa fa-list"></i> Kategori
             </Link>
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             <Link
               to={"/users"}
-              class={`${
+              className={`${
                 pathname == "/users"
                   ? "bg-[#FF8E29] text-white"
                   : "hover:bg-[#FF8E29]/20 text-slate-600"
@@ -77,10 +78,10 @@ const Sidebar = () => {
               <i className="me-2 fa fa-users"></i> Pengguna
             </Link>
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             <Link
               to={"/laporan"}
-              class={`${
+              className={`${
                 pathname == "/laporan"
                   ? "bg-[#FF8E29] text-white"
                   : "hover:bg-[#FF8E29]/20 text-slate-600"
@@ -90,6 +91,13 @@ const Sidebar = () => {
             </Link>
           </li>
         </ul>
+
+        <button
+          onClick={logout}
+          className="text-white text-sm  px-4 rounded-full hover:bg-[#F65454]/70 bg-[#F65454] py-2"
+        >
+          <div className="fa fa-right-from-bracket me-2"></div> Logout
+        </button>
       </nav>
     </div>
   );
