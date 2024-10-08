@@ -11,7 +11,9 @@ class TransactionService {
     try {
       const { products } = data;
       let totalHarga = 0;
+      const receiptDetails = [];
 
+      // Create a new transaction
       const result = await Transaction.create(
         {
           totalPrice: totalHarga,
@@ -20,6 +22,7 @@ class TransactionService {
         { transaction: t }
       );
 
+      // Process each product
       for (const product of products) {
         const { id, qty } = product;
         const res = await ProdukService.getProdukById(id);
@@ -27,6 +30,7 @@ class TransactionService {
         const subtotal = res ? price * qty : 0;
         totalHarga += subtotal;
 
+        // Save transaction details
         await TransactionDetail.create(
           {
             transactionId: result.id,
@@ -37,8 +41,17 @@ class TransactionService {
           },
           { transaction: t }
         );
+
+        // Add product details to receipt
+        receiptDetails.push({
+          productName: res.name,
+          qty,
+          price,
+          subtotal,
+        });
       }
 
+      // Update the total price in the transaction
       const dataUpdate = { totalPrice: totalHarga };
       await Transaction.update(dataUpdate, {
         where: {
@@ -47,9 +60,33 @@ class TransactionService {
         transaction: t,
       });
 
+      // Commit the transaction
       await t.commit();
-      return { status: "success", transactionId: result.id };
+
+      // Generate the receipt
+      const receipt = `
+        Receipt ID: ${result.id}
+        Date: ${new Date().toLocaleString()}
+        -------------------------
+        Products:
+        ${receiptDetails
+          .map(
+            (item) =>
+              `${item.productName} (Qty: ${
+                item.qty
+              }) - Rp ${item.price.toLocaleString("id-ID")} x ${
+                item.qty
+              } = Rp ${item.subtotal.toLocaleString("id-ID")}`
+          )
+          .join("\n")}
+        -------------------------
+        Total: Rp ${totalHarga.toLocaleString("id-ID")}
+      `;
+
+      // Return success with the receipt details
+      return { transactionId: result.id, receipt };
     } catch (error) {
+      // Rollback the transaction in case of error
       await t.rollback();
       return { status: "error", message: error.message };
     }

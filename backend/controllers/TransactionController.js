@@ -4,10 +4,12 @@ class TransactionController {
   static async saveTransaction(req, res) {
     try {
       const data = req.body;
-      await TransactionService.saveTransaction(data);
-      return res.json({ msg: "Transaction successfully" });
+
+      const response = await TransactionService.saveTransaction(data);
+
+      return res.json({ message: "Transaction successfully", data: response });
     } catch (error) {
-      return res.status(500).json({ msg: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 
@@ -16,7 +18,7 @@ class TransactionController {
       const response = await TransactionService.getTotalPenjualan();
       return res.json(response);
     } catch (error) {
-      return res.status(500).json({ msg: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
   static async getTotalKeuntungan(req, res) {
@@ -24,7 +26,7 @@ class TransactionController {
       const response = await TransactionService.getTotalKeuntungan();
       return res.json(response);
     } catch (error) {
-      return res.status(500).json({ msg: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
   static async getChartData(req, res) {
@@ -32,7 +34,7 @@ class TransactionController {
       const response = await TransactionService.getChartData();
       return res.json(response);
     } catch (error) {
-      return res.status(500).json({ msg: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
   static async getHistory(req, res) {
@@ -41,7 +43,7 @@ class TransactionController {
       const response = await TransactionService.getHistory(startDate, endDate);
       return res.json(response);
     } catch (error) {
-      return res.status(500).json({ msg: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 }
