@@ -44,7 +44,13 @@ const Produk = () => {
               className="border-b py-4 text-slate-500 font-semibold"
               align="start"
             >
-              Stok
+              Deskripsi
+            </th>
+            <th
+              className="border-b py-4 text-slate-500 font-semibold"
+              align="start"
+            >
+              Stock
             </th>
             <th
               className="border-b py-4 text-slate-500 font-semibold"
@@ -95,6 +101,7 @@ const Produk = () => {
                   />
                 </td>
                 <td className="border-b py-4">{produk.name}</td>
+                <td className="border-b py-4">{produk.description}</td>
                 <td className="border-b py-4">{produk.stock}</td>
                 <td className="border-b py-4">{formatRupiah(produk.price)}</td>
                 <td className="border-b py-4">{produk.category?.name}</td>
@@ -112,3 +119,4 @@ const Produk = () => {
 };
 
 export default Produk;
+
