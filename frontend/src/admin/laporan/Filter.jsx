@@ -32,7 +32,7 @@ const Filter = ({ currDate }) => {
   };
 
   return (
-    <div>
+    <div data-html2canvas-ignore>
       <form>
         <div className="flex items-center gap-4 mb-4">
           <label htmlFor="startDate" className="text-nowrap">

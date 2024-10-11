@@ -23,7 +23,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <GlobalContextProvider>
     <Toaster />
-    {/* Manage Routing or navigation with Suspense for loading fallback */}
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
@@ -63,6 +62,7 @@ root.render(
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/" element={<Usermenu />} />
+          <Route path="/test" element={<App />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

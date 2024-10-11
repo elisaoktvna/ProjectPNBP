@@ -4,6 +4,10 @@ import ProdukService from "./ProdukService.js";
 import sequelize from "../config/Database.js";
 import { Op, Sequelize } from "sequelize";
 import Product from "../models/ProductModel.js";
+import escpos from "escpos";
+import escposUSB from "escpos-usb"; // Mengimpor escpos-usb
+
+escpos.USB = escposUSB; // Menetapkan USB adapter ke escpos
 
 class TransactionService {
   static async saveTransaction(data) {
@@ -61,37 +65,104 @@ class TransactionService {
       });
 
       // Commit the transaction
-      await t.commit();
 
       // Generate the receipt
-      const receipt = `
-        Receipt ID: ${result.id}
-        Date: ${new Date().toLocaleString()}
-        -------------------------
-        Products:
-        ${receiptDetails
-          .map(
-            (item) =>
-              `${item.productName} (Qty: ${
-                item.qty
-              }) - Rp ${item.price.toLocaleString("id-ID")} x ${
-                item.qty
-              } = Rp ${item.subtotal.toLocaleString("id-ID")}`
-          )
-          .join("\n")}
-        -------------------------
-        Total: Rp ${totalHarga.toLocaleString("id-ID")}
-      `;
+      // const receipt = `
+      //   Receipt ID: ${result.id}
+      //   Date: ${new Date().toLocaleString()}
+      //   -------------------------
+      //   Products:
+      //   ${receiptDetails
+      //     .map(
+      //       (item) =>
+      //         `${item.productName} (Qty: ${
+      //           item.qty
+      //         }) - Rp ${item.price.toLocaleString("id-ID")} x ${
+      //           item.qty
+      //         } = Rp ${item.subtotal.toLocaleString("id-ID")}`
+      //     )
+      //     .join("\n")}
+      //   -------------------------
+      //   Total: Rp ${totalHarga.toLocaleString("id-ID")}
+      // `;
+
+      // Print the receipt using the thermal printer
+      await TransactionService.printReceipt(receiptDetails);
+      await t.commit();
 
       // Return success with the receipt details
       return { transactionId: result.id, receipt };
     } catch (error) {
+      console.log(error);
+
       // Rollback the transaction in case of error
       await t.rollback();
       return { status: "error", message: error.message };
     }
   }
 
+  static async printReceipt(receiptDetails) {
+    try {
+      // const receipt = `
+      //   Receipt ID: ${result.id}
+      //   Date: ${new Date().toLocaleString()}
+      //   -------------------------
+      //   Products:
+      //   ${receiptDetails
+      //     .map(
+      //       (item) =>
+      //         `${item.productName} (Qty: ${
+      //           item.qty
+      //         }) - Rp ${item.price.toLocaleString("id-ID")} x ${
+      //           item.qty
+      //         } = Rp ${item.subtotal.toLocaleString("id-ID")}`
+      //     )
+      //     .join("\n")}
+      //   -------------------------
+      //   Total: Rp ${totalHarga.toLocaleString("id-ID")}
+      // `;
+
+      const device = new escpos.USB(); // Membuat instance dari USB adapter
+
+      const options = { encoding: "GB18030" }; // Opsi encoding (opsional)
+
+      const printer = new escpos.Printer(device, options);
+      device.open(function (err) {
+        if (err) {
+          console.error("Printer not found:", err);
+          return;
+        }
+        let totalHarga = 0;
+        let totalItem = 0;
+        const format = `${receiptDetails.map((rec) => {
+          const { price, productName, qty } = rec;
+          const total = rec.qty * rec.price;
+          totalItem += qty;
+          totalHarga += total;
+          return (
+            productName + "  " + qty + "*" + price + "            " + total + ""
+          );
+        })}`;
+
+        printer
+          .font("a")
+          .align("ct")
+          .style("bu")
+          .size(0, 0)
+          .text("Order List\n")
+          .text("--------------------------------\n")
+          .text(format + "\n ")
+          .text(`Total item:                ${totalHarga}\n`)
+          .text(`Harga:                     ${totalHarga}\n`)
+          .text("--------------------------------\n")
+          .text("Terima Kasih\n")
+          .cut()
+          .close();
+      });
+    } catch (error) {
+      console.error("Print failed:", error);
+    }
+  }
   static async getTotalKeuntungan() {
     const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();

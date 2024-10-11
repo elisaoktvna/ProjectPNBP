@@ -15,12 +15,6 @@ dotenv.config();
 
 const app = express();
 
-// (async()=>{
-//     await db.sync();
-// })();
-
-// app.use(cors());
-//baru
 app.use(
   cors({
     credentials: true,
@@ -48,5 +42,6 @@ app.use(TransactionRoute);
 app.use(ProdukRoute);
 app.use(UserRoute);
 app.use(AuthRoute);
+
 // app.listen(5000, "10.10.184.250");
 app.listen(5000, () => console.log("server up and running..."));
