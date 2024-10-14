@@ -15,11 +15,10 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "name": "afi",
-    "username": "afi",
-    "password": "12345",
-    "confPassword": "12345",
-    "role": "karyawan"
+    "name": "radit",
+    "email": "raditus05@gmail.com",
+    "password": "12345678",
+    "role": "admin"
 }
 
 ###
