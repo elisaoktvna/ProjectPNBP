@@ -8,8 +8,17 @@ import { formatRupiah } from "../../helpers/currency";
 
 const Produk = () => {
   const { data: produks } = useFetch("/produk");
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
 
   const backendURL = process.env.REACT_APP_BASE_URL;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = produks.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const totalPages = Math.ceil(produks.length / itemsPerPage);
 
   return (
     <Layout>
@@ -44,7 +53,13 @@ const Produk = () => {
               className="border-b py-4 text-slate-500 font-semibold"
               align="start"
             >
-              Stok
+              Deskripsi
+            </th>
+            <th
+              className="border-b py-4 text-slate-500 font-semibold"
+              align="start"
+            >
+              Stock
             </th>
             <th
               className="border-b py-4 text-slate-500 font-semibold"
@@ -67,7 +82,7 @@ const Produk = () => {
           </tr>
         </thead>
         <tbody>
-          {produks.length === 0 && (
+          {currentItems.length === 0 && (
             <tr>
               <td
                 className="border-b py-4 text-center text-slate-500"
@@ -77,11 +92,11 @@ const Produk = () => {
               </td>
             </tr>
           )}
-          {produks?.map((produk, i) => {
+          {currentItems?.map((produk, i) => {
             return (
               <tr key={i}>
                 <td className="border-b py-4 p-2" align="middle">
-                  {i + 1}
+                  {indexOfFirstItem + i + 1}
                 </td>
                 <td className="border-b py-4">
                   <img
@@ -95,6 +110,7 @@ const Produk = () => {
                   />
                 </td>
                 <td className="border-b py-4">{produk.name}</td>
+                <td className="border-b py-4">{produk.description}</td>
                 <td className="border-b py-4">{produk.stock}</td>
                 <td className="border-b py-4">{formatRupiah(produk.price)}</td>
                 <td className="border-b py-4">{produk.category?.name}</td>
@@ -107,8 +123,24 @@ const Produk = () => {
           })}
         </tbody>
       </table>
+      {/* Paginasi */}
+      <div className="mt-4 flex justify-center">
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => paginate(page)}
+            className={`mx-1 px-3 py-1 border ${
+              currentPage === page ? "bg-blue-500 text-white" : "bg-white"
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
     </Layout>
   );
 };
 
 export default Produk;
+
+
