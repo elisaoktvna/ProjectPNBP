@@ -27,11 +27,6 @@ root.render(
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
-          <Route path="/" element={<App />} />
-          {/* <Route path="/kategori" element={<Kategori />} />
-          <Route path="/listproduk" element={<Produk />} />
-          <Route path="/laporan" element={<Laporan />} />
-          <Route path="/users" element={<Pengguna />} /> */}
           <Route
             path="/kategori"
             element={
@@ -76,7 +71,6 @@ root.render(
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/" element={<Usermenu />} />
-          <Route path="/test" element={<App />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
