@@ -89,6 +89,18 @@ const Sidebar = () => {
               <i className="me-2 fa fa-chart-line"></i> Keuangan
             </Link>
           </li>
+          <li className="mb-2">
+            <Link
+              to={"/profil"}
+              className={`${
+                pathname == "/profil"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <i className="me-2 fa fa-chart-line"></i> Profil
+            </Link>
+          </li>
         </ul>
 
         <button

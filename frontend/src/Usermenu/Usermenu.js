@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import Baner from "../asset/Rectangle 27 (1).png";
+import { useFetch } from "../hooks/useFetch";
 import Mie from "../asset/mie.png";
 import Milo from "../asset/milo.png";
 import * as tf from "@tensorflow/tfjs";
@@ -116,7 +117,10 @@ const Usermenu = () => {
     height: 720,
     facingMode: "user",
   };
+  const { data: produks } = useFetch("/produk");
+  console.log(produks);
 
+  const backendURL = process.env.REACT_APP_BASE_URL;
   return (
     <div className="flex">
       {/* Main Content */}
@@ -141,26 +145,34 @@ const Usermenu = () => {
         </div>
         {/* Menu Items */}
         <div className="mt-24 grid grid-cols-3 gap-x-6 gap-y-20">
-          {menuItems.map((item, index) => (
-            <div
-              key={index}
-              className="bg-yellow-100 p-4 rounded-lg shadow-md flex flex-col items-center relative group hover:-translate-y-3 transition-transform duration-300 ease-in-out"
-            >
-              <img
-                src={item.img}
-                alt={item.name}
-                className="absolute top-0 transform -translate-y-1/2 mb-2 object-contain"
-                style={{ width: "120px", height: "120px" }}
-              />
-              <div className="text-center mt-16">
-                <h3 className="font-bold">{item.name}</h3>
-                <p className="text-gray-700">{item.price}</p>
-                <p className="text-yellow-500">
-                  <i className="fa fa-star"></i> {item.rating}
-                </p>
+          {produks?.map((produk, index) => {
+            return (
+              <div
+                key={index}
+                className="bg-yellow-100 p-4 rounded-lg shadow-md flex flex-col items-center relative group hover:-translate-y-3 transition-transform duration-300 ease-in-out"
+              >
+                {index + 1}
+                <img
+                  src={
+                    produk.image
+                      ? `${backendURL}/images/${produk.image}`
+                      : `${backendURL}/images/default-image.jpg`
+                  }
+                  alt={produk.name || "Produk"}
+                  className="absolute top-0 transform -translate-y-1/2 mb-2 object-contain"
+                  style={{ width: "120px", height: "120px" }}
+                />
+                <div className="text-center mt-16">
+                  <h3 className="font-bold">{produk.name}</h3>
+                  <p className="text-gray-700">{produk.price || "No rating"}</p>
+                  <p className="text-yellow-500">
+                    {produk.rating || "No rating"}
+                    <i className="fas fa-star"></i>
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       {/* Sidebar for Order Summary */}

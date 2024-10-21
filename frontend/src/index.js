@@ -10,7 +10,7 @@ import Login from "./auth/Login.jsx";
 import Protected from "./Protected.js";
 import ResetPassword from "./auth/ResetPassword.jsx";
 import Usermenu from "./Usermenu/Usermenu.js";
-
+import Profil from "./admin/Profil/Profil.js"
 // Lazy load the components
 const Kategori = lazy(() => import("./admin/kategori/Kategori.js"));
 const Produk = lazy(() => import("./admin/listproduk/Produk.js"));
