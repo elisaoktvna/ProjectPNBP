@@ -1,108 +1,142 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
-import Webcam from "react-webcam";
+import React, { useRef, useState, useEffect } from "react";
 import Baner from "../asset/Rectangle 27 (1).png";
 import { useFetch } from "../hooks/useFetch";
-import Mie from "../asset/mie.png";
-import Milo from "../asset/milo.png";
 import * as tf from "@tensorflow/tfjs";
+import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
+import preProcessLandmark from "../helpers/LandmarkProses";
+import calcLandmarkList from "../helpers/CalculateLandmark";
+import ConvertResult from "../helpers/ConvertResult";
 
 const Usermenu = () => {
-  const webcamRef = useRef(null);
   const canvasRef = useRef(null);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [model, setModel] = useState(null);
+  const webcamRef = useRef(null);
+  const [loadCamera, setLoadCamera] = useState(false);
 
-  useEffect(() => {
-    const loadModel = async () => {
-      try {
-        const loadedModel = await tf.loadLayersModel(
-          "http://localhost:3000/model/model.json"
-        );
-        setModel(loadedModel);
-      } catch (error) {
-        console.error("Error loading model:", error);
+  const [resultPredict, setResultPredict] = useState({
+    abjad: "",
+    acc: "",
+  });
+
+  let model;
+  let handLandmarker;
+
+  const [handPresence, setHandPresence] = useState(false);
+
+  const startWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+
+      if (webcamRef.current) {
+        console.log("halo");
+
+        webcamRef.current.srcObject = stream;
       }
-    };
+      console.log(webcamRef);
 
-    loadModel();
-  }, []);
+      setLoadCamera(true);
+      await initializeHandDetection();
+    } catch (error) {
+      console.error("Error accessing webcam:", error);
+    }
+  };
 
-  useEffect(() => {
-    const contextCanvas = canvasRef.current.getContext("2d");
-    const intervalId = setInterval(async () => {
-      if (webcamRef.current && webcamRef.current.video.readyState === 4) {
-        const video = webcamRef.current.video;
+  const loadModel = async () => {
+    setLoadCamera(false);
+    try {
+      const lm = await tf.loadLayersModel(
+        "http://localhost:3000/model/model.json"
+      );
+      model = lm;
 
-        // Draw the video frame to the canvas
-        contextCanvas.drawImage(
-          video,
-          0,
-          0,
-          canvasRef.current.width,
-          canvasRef.current.height
-        );
+      const emptyInput = tf.tensor2d([[0, 0]]);
 
-        const imageData = contextCanvas.getImageData(
-          0,
-          0,
-          canvasRef.current.width,
-          canvasRef.current.height
-        );
+      model.predict(emptyInput);
 
-        if (model) {
-          // Convert image to Tensor and resize
-          let resizedImage = tf.image
-            .resizeBilinear(tf.browser.fromPixels(imageData), [42, 42])
-            .toFloat()
-            .mean(2) // Convert to grayscale by averaging RGB channels
-            .expandDims(0) // Add batch dimension
-            .expandDims(-1); // Add channel dimension (should be 1 for grayscale)
+      setLoadCamera(true);
+    } catch (error) {
+      //   console.error("Error loading model:", error);
+    }
+  };
 
-          // Check shape before prediction
-          console.log(resizedImage.shape); // Should be [1, 42, 42, 1]
+  const initializeHandDetection = async () => {
+    try {
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+      );
+      handLandmarker = await HandLandmarker.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
+        },
+        numHands: 2,
+        runningMode: "VIDEO",
+      });
 
-          // Reshape to [1, 42] if necessary
-          const reshapedImage = resizedImage.reshape([1, 42 * 42]);
+      detectHands();
+    } catch (error) {
+      console.error("Error initializing hand detection:", error);
+    }
+  };
 
-          // Make a prediction
-          const predictions = await model.predict(reshapedImage).data();
-          console.log(predictions);
+  const makePrediction = async (finalResult) => {
+    const input = tf.tensor2d([finalResult]);
+
+    // Melakukan prediksi
+    const prediction = model.predict(input);
+
+    const result = prediction.dataSync();
+
+    const maxEntry = Object.entries(result).reduce((max, entry) => {
+      const [, value] = entry;
+      return value > max[1] ? entry : max;
+    });
+
+    // maxEntry sekarang berisi [key, value] dengan nilai terbesar
+    const [maxKey, maxValue] = maxEntry;
+
+    const percentageValue = (maxValue * 100).toFixed(2) + "%";
+
+    setResultPredict({
+      abjad: ConvertResult(parseInt(maxKey)),
+      acc: percentageValue,
+    });
+
+    // Hapus tensor
+    input.dispose();
+    prediction.dispose();
+  };
+
+  const detectHands = async () => {
+    if (webcamRef.current && webcamRef.current.readyState >= 2) {
+      const detections = handLandmarker.detectForVideo(
+        webcamRef.current,
+        performance.now()
+      );
+
+      setHandPresence(detections.handedness.length > 0);
+
+      // Assuming detections.landmarks is an array of landmark objects
+      if (detections.landmarks) {
+        if (detections.handednesses.length > 0) {
+          const landm = detections.landmarks[0].map((landmark) => landmark);
+
+          const calt = calcLandmarkList(webcamRef.current, landm);
+          const finalResult = preProcessLandmark(calt);
+
+          makePrediction(finalResult);
         }
-
-        const dataUrl = canvasRef.current.toDataURL("image/jpeg", 0.5);
-        setCapturedImage(dataUrl);
       }
-    }, 1200);
+    }
+    requestAnimationFrame(detectHands);
+  };
 
-    return () => clearInterval(intervalId); // Clear interval on component unmount
-  }, [model]);
-
-  const menuItems = [
-    { name: "Taro Milk tea", price: "Rp 5000", rating: 5.0, img: Mie },
-    { name: "Mochaccino", price: "Rp 5000", rating: 5.0, img: Milo },
-    { name: "Chocolate", price: "Rp 5000", rating: 5.0, img: Mie },
-    { name: "Thai Tea", price: "Rp 5000", rating: 5.0, img: Milo },
-    { name: "Cincau Susu Gula Aren", price: "Rp 5000", rating: 5.0, img: Mie },
-    { name: "Kopi susu Gula Aren", price: "Rp 5000", rating: 5.0, img: Milo },
-    {
-      name: "Lemon Tea",
-      price: "Rp 4000",
-      rating: 5.0,
-      img: "https://placehold.co/100x200",
-    },
-    {
-      name: "Teh",
-      price: "Rp 4000",
-      rating: 5.0,
-      img: "https://placehold.co/100x200",
-    },
-    {
-      name: "Milo",
-      price: "Rp 4000",
-      rating: 5.0,
-      img: "https://placehold.co/100x200",
-    },
-  ];
+  useEffect(() => {
+    loadModel();
+    startWebcam();
+    setLoadCamera(true);
+  }, []);
+  // Define a drawing function
 
   const categories = [
     "Minuman Dingin",
@@ -118,7 +152,6 @@ const Usermenu = () => {
     facingMode: "user",
   };
   const { data: produks } = useFetch("/produk");
-  console.log(produks);
 
   const backendURL = process.env.REACT_APP_BASE_URL;
   return (
@@ -197,6 +230,7 @@ const Usermenu = () => {
             Checkout
           </button>
         </div>
+
         {/* Webcam Component */}
         <div className="mt-8">
           <div
@@ -208,13 +242,13 @@ const Usermenu = () => {
               opacity: 0, // Set opacity to 0
             }}
           >
-            <Webcam
-              mirrored
+            <video
               ref={webcamRef}
-              height={600}
-              width={800}
-              videoConstraints={videoConstraints}
-            />
+              className="w-full max-h-[80svh] object-cover"
+              autoPlay
+              playsInline
+            ></video>
+
             <canvas
               ref={canvasRef}
               style={{
