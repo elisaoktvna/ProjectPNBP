@@ -15,6 +15,7 @@ const Usermenu = () => {
   const [resultPredict, setResultPredict] = useState({
     abjad: "",
     acc: "",
+    handType: "",
   });
 
   let model;
@@ -29,11 +30,8 @@ const Usermenu = () => {
       });
 
       if (webcamRef.current) {
-        console.log("halo");
-
         webcamRef.current.srcObject = stream;
       }
-      console.log(webcamRef);
 
       setLoadCamera(true);
       await initializeHandDetection();
@@ -46,17 +44,13 @@ const Usermenu = () => {
     setLoadCamera(false);
     try {
       const lm = await tf.loadLayersModel(
-        "http://localhost:3000/model/model.json"
+        "http://localhost:3000/model/model2/model.json"
       );
       model = lm;
 
-      const emptyInput = tf.tensor2d([[0, 0]]);
-
-      model.predict(emptyInput);
-
       setLoadCamera(true);
     } catch (error) {
-      //   console.error("Error loading model:", error);
+      console.error("Error loading model:", error);
     }
   };
 
@@ -79,9 +73,9 @@ const Usermenu = () => {
     }
   };
 
-  const makePrediction = async (finalResult) => {
+  const makePrediction = async (finalResult, handedness) => {
     const input = tf.tensor2d([finalResult]);
-
+    if (!model) return;
     // Melakukan prediksi
     const prediction = model.predict(input);
 
@@ -100,6 +94,7 @@ const Usermenu = () => {
     setResultPredict({
       abjad: ConvertResult(parseInt(maxKey)),
       acc: percentageValue,
+      handType: handedness, // Menyimpan informasi apakah tangan yang terdeteksi kanan atau kiri
     });
 
     // Hapus tensor
@@ -114,18 +109,16 @@ const Usermenu = () => {
         performance.now()
       );
 
-      setHandPresence(detections.handedness.length > 0);
+      setHandPresence(detections.handednesses.length > 0);
 
-      // Assuming detections.landmarks is an array of landmark objects
-      if (detections.landmarks) {
-        if (detections.handednesses.length > 0) {
-          const landm = detections.landmarks[0].map((landmark) => landmark);
+      // Mengecek jika ada deteksi tangan
+      if (detections.landmarks && detections.handednesses.length > 0) {
+        const handType = detections.handednesses[0][0].categoryName; // Mendapatkan apakah tangan kanan atau kiri
+        const landm = detections.landmarks[0].map((landmark) => landmark); 
+        const calt = calcLandmarkList(webcamRef.current, landm);
+        const finalResult = preProcessLandmark(calt);
 
-          const calt = calcLandmarkList(webcamRef.current, landm);
-          const finalResult = preProcessLandmark(calt);
-
-          makePrediction(finalResult);
-        }
+        makePrediction(finalResult, handType); // Mengirim informasi tangan (kanan/kiri) bersama dengan hasil landmark
       }
     }
     requestAnimationFrame(detectHands);
@@ -136,7 +129,8 @@ const Usermenu = () => {
     startWebcam();
     setLoadCamera(true);
   }, []);
-  // Define a drawing function
+
+  console.log(resultPredict);
 
   const categories = [
     "Minuman Dingin",
@@ -146,14 +140,10 @@ const Usermenu = () => {
     "Juice",
   ];
 
-  const videoConstraints = {
-    width: 1280,
-    height: 720,
-    facingMode: "user",
-  };
   const { data: produks } = useFetch("/produk");
 
   const backendURL = process.env.REACT_APP_BASE_URL;
+
   return (
     <div className="flex">
       {/* Main Content */}
@@ -233,6 +223,12 @@ const Usermenu = () => {
 
         {/* Webcam Component */}
         <div className="mt-8">
+          <video
+            ref={webcamRef}
+            className="w-full max-h-[80svh] object-cover"
+            autoPlay
+            playsInline
+          ></video>
           <div
             style={{
               position: "absolute",
@@ -242,30 +238,24 @@ const Usermenu = () => {
               opacity: 0, // Set opacity to 0
             }}
           >
-            <video
-              ref={webcamRef}
-              className="w-full max-h-[80svh] object-cover"
-              autoPlay
-              playsInline
-            ></video>
-            {/* <Webcam
-              mirrored
-              ref={webcamRef}
-              height={600}
-              width={800}
-              videoConstraints={videoConstraints}
-            /> */}
-
             <canvas
               ref={canvasRef}
               style={{
                 background: "red",
                 marginTop: "5px",
               }}
-              height={600}
-              width={800}
+              height={300}
+              width={300}
             />
           </div>
+        </div>
+        <div className="mt-2 text-center">
+          <p className="font-semibold">
+            Gesture: {resultPredict.abjad} - {resultPredict.acc}
+          </p>
+          <p className="text-sm text-gray-500">
+            Tangan terdeteksi: {resultPredict.handType}
+          </p>
         </div>
       </div>
     </div>
