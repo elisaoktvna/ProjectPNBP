@@ -24,11 +24,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <GlobalContextProvider>
     <Toaster />
-    {/* Manage Routing or navigation with Suspense for loading fallback */}
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
-          {/* <Route path="/" element={<App />} /> */}
+          <Route path="/" element={<App />} />
           {/* <Route path="/kategori" element={<Kategori />} />
           <Route path="/listproduk" element={<Produk />} />
           <Route path="/laporan" element={<Laporan />} />

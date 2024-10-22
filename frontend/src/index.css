@@ -32,3 +32,13 @@
 :where(input, textarea) {
   @apply outline-[#FFC200];
 }
+
+.print-hidden {
+  display: none;
+}
+
+@media print {
+  .print-hidden {
+    display: block;
+  }
+}

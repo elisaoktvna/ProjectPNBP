@@ -64,27 +64,8 @@ const Dashboard = () => {
     },
   };
 
-  const printTest = async () => {
-    const res = await fetch(process.env.REACT_APP_BASE_URL + "/transaction", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        products: [
-          {
-            id: 1,
-            qty: 5,
-          },
-        ],
-      }),
-    });
-    const data = await res.json();
-    console.log(data.data.receipt);
-  };
   return (
     <Layout>
-      <button onClick={printTest}>Print</button>
       {/* //Keuntungan dan Penjualan */}
       <div className="container mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
