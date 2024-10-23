@@ -13,7 +13,7 @@ const abjads = [
 ];
 
 const ConvertResult = (result) => {
-  return `Abjad ${abjads[result]}`;
+  return `${abjads[result]}`;
 };
 
 export default ConvertResult;

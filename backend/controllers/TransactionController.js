@@ -4,6 +4,8 @@ class TransactionController {
   static async saveTransaction(req, res) {
     try {
       const data = req.body;
+      console.log(data);
+
       const response = await TransactionService.saveTransaction(data);
       return res.json({ message: "Transaction successfully", data: response });
     } catch (error) {
