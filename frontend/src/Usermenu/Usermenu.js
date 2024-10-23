@@ -92,7 +92,6 @@ const Usermenu = () => {
       setModal2(false);
       setReset(true);
       setOrderList([]);
-      toast.success("Berhasil melakukan transaksi");
     } catch (error) {
       toast.error("Gagal melakukan transaksi");
     }
