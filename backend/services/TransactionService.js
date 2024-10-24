@@ -13,9 +13,10 @@ class TransactionService {
   static async saveTransaction(data) {
     const t = await sequelize.transaction();
     try {
-      const { products } = data;
+      const { products, print } = data;
       let totalHarga = 0;
       const receiptDetails = [];
+      console.log(products);
 
       // Create a new transaction
       const result = await Transaction.create(
@@ -64,34 +65,12 @@ class TransactionService {
         transaction: t,
       });
 
-      // Commit the transaction
-
-      // Generate the receipt
-      // const receipt = `
-      //   Receipt ID: ${result.id}
-      //   Date: ${new Date().toLocaleString()}
-      //   -------------------------
-      //   Products:
-      //   ${receiptDetails
-      //     .map(
-      //       (item) =>
-      //         `${item.productName} (Qty: ${
-      //           item.qty
-      //         }) - Rp ${item.price.toLocaleString("id-ID")} x ${
-      //           item.qty
-      //         } = Rp ${item.subtotal.toLocaleString("id-ID")}`
-      //     )
-      //     .join("\n")}
-      //   -------------------------
-      //   Total: Rp ${totalHarga.toLocaleString("id-ID")}
-      // `;
-
       // Print the receipt using the thermal printer
-      await TransactionService.printReceipt(receiptDetails);
+      if (print) await TransactionService.printReceipt(receiptDetails);
       await t.commit();
 
       // Return success with the receipt details
-      return { transactionId: result.id, receipt };
+      return { transactionId: result.id };
     } catch (error) {
       console.log(error);
 
@@ -103,25 +82,6 @@ class TransactionService {
 
   static async printReceipt(receiptDetails) {
     try {
-      // const receipt = `
-      //   Receipt ID: ${result.id}
-      //   Date: ${new Date().toLocaleString()}
-      //   -------------------------
-      //   Products:
-      //   ${receiptDetails
-      //     .map(
-      //       (item) =>
-      //         `${item.productName} (Qty: ${
-      //           item.qty
-      //         }) - Rp ${item.price.toLocaleString("id-ID")} x ${
-      //           item.qty
-      //         } = Rp ${item.subtotal.toLocaleString("id-ID")}`
-      //     )
-      //     .join("\n")}
-      //   -------------------------
-      //   Total: Rp ${totalHarga.toLocaleString("id-ID")}
-      // `;
-
       const device = new escpos.USB(); // Membuat instance dari USB adapter
 
       const options = { encoding: "GB18030" }; // Opsi encoding (opsional)

@@ -42,3 +42,14 @@
     display: block;
   }
 }
+
+.focus-left-container {
+  @apply border-yellow-500;
+}
+.focus-bottom-container {
+  @apply border-yellow-500;
+}
+
+.shadow-bottom-container {
+  @apply shadow-yellow-500;
+}

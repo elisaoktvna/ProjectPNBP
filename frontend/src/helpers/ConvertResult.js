@@ -1,32 +1,19 @@
 const abjads = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
+  "Open",
+  "One",
+  "Two",
+  "Three",
+  "Four",
+  "Thumb Down",
+  "Thumb Up",
+  "Okay",
+  "Close",
+  "Arrow Left",
+  "Arrow Right",
 ];
 
 const ConvertResult = (result) => {
-  return `Abjad ${abjads[result]}`;
+  return `${abjads[result]}`;
 };
 
 export default ConvertResult;
