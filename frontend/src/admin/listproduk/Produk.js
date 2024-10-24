@@ -9,7 +9,7 @@ import { formatRupiah } from "../../helpers/currency";
 const Produk = () => {
   const { data: produks = [] } = useFetch("/produk");
   const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 7;
 
   const backendURL = process.env.REACT_APP_BASE_URL;
 

@@ -98,7 +98,7 @@ const Sidebar = () => {
                   : "hover:bg-[#FF8E29]/20 text-slate-600"
               } block px-4 py-2 rounded `}
             >
-              <i className="me-2 fa fa-chart-line"></i> Profil
+              <i className="me-2 fa fa-users"></i> Profil
             </Link>
           </li>
         </ul>
