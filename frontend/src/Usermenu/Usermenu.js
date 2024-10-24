@@ -108,6 +108,7 @@ const Usermenu = () => {
   };
   return (
     <>
+
       <div className="flex h-screen bg-slate-100">
         <div className="w-3/4 p-4 overflow-y-auto">
           <div className="mb-4">
@@ -263,7 +264,14 @@ const Usermenu = () => {
 
             {/* Webcam Component */}
             <div className="mt-8">
+            <video
+                  ref={webcamRef}
+                  className="w-full max-h-[80svh] object-cover"
+                  autoPlay
+                  playsInline
+                ></video>
               <div
+              
                 style={{
                   position: "absolute",
                   top: "0", // Move out of view
@@ -272,12 +280,7 @@ const Usermenu = () => {
                   opacity: 0, // Set opacity to 0
                 }}
               >
-                <video
-                  ref={webcamRef}
-                  className="w-full max-h-[80svh] object-cover"
-                  autoPlay
-                  playsInline
-                ></video>
+                
               </div>
             </div>
             <div className="mt-2 text-center">
