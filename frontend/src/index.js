@@ -67,6 +67,14 @@ root.render(
               </Protected>
             }
           />
+          <Route
+            path="/profil"
+            element={
+              <Protected>
+                <Profil />
+              </Protected>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />

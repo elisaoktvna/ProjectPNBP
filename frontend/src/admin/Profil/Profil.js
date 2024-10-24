@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import { useFetch } from '../../hooks/useFetch';  
+import profileImage from '../../asset/profil.png'; // Sesuaikan dengan path yang benar
 
 const Profil = () => {
   const { data: user } = useFetch("/auth/user");  
@@ -67,7 +68,7 @@ const Profil = () => {
     <Layout>
       <div className="bg-white p-8 rounded-lg shadow-md flex">
         <div className="w-1/3 flex justify-center items-center">
-          <img src="https://placehold.co/200x200" alt="Profile picture" className="rounded-lg w-48 h-48 object-cover" />
+          <img src={profileImage} alt="Profile picture" className="rounded-lg w-48 h-48 object-cover" />
         </div>
         <div className="w-2/3 pl-8">
           <h1 className="text-2xl font-semibold mb-6">Profil</h1>
@@ -112,7 +113,7 @@ const Profil = () => {
             <div className="bg-gray-200 p-2 rounded-lg">{user.pin || 'XXXXXXXX'}</div> 
           </div>
 
-          <div className="flex space-x-4 mt-6">
+          {/* <div className="flex space-x-4 mt-6">
             {!isEditing && (
               <button 
                 onClick={handleEditClick} 
@@ -137,7 +138,7 @@ const Profil = () => {
             >
               Change Password
             </button>
-          </div>
+          </div> */}
 
           {isChangingPassword && (
             <div className="mt-6">
