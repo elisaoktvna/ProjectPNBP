@@ -58,12 +58,28 @@ class GestureHandle {
 
   navigateItems = (itemsArray) => {
     const { gesture, handType } = this.gesture;
+  
+    // Jeda waktu antar perubahan fokus (misalnya 1000ms = 1 detik)
+    const delay = 300;
+  
+    // Cek apakah fokus sedang dalam proses dan belum boleh diganti
+    if (this.isFocusing) return;
+  
     if (gesture === "One") {
-      this.indexActive =
-        handType === "Right"
-          ? Math.min(this.indexActive + 1, itemsArray.length - 1)
-          : Math.max(this.indexActive - 1, 0);
-      this.focusItem(itemsArray);
+      // Aktifkan flag fokus untuk mencegah perubahan fokus selama delay
+      this.isFocusing = true;
+  
+      setTimeout(() => {
+        this.indexActive =
+          handType === "Right"
+            ? Math.min(this.indexActive + 1, itemsArray.length - 1)
+            : Math.max(this.indexActive - 1, 0);
+        
+        this.focusItem(itemsArray);
+  
+        // Setelah jeda selesai, izinkan perubahan fokus lagi
+        this.isFocusing = false;
+      }, delay);
     } else if (
       this.state.layer === 1 &&
       this.state.element === 3 &&
@@ -80,6 +96,7 @@ class GestureHandle {
       this.focusItem(itemsArray);
     }
   };
+  
 
   handleCheckout = () => {
     const checkoutBtn = document.querySelector(".checkoutBtn");
