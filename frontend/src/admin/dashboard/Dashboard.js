@@ -75,7 +75,7 @@ const Dashboard = () => {
             </h2>
             <p className="text-gray-500 mt-1">Periode Bulan Ini</p>
             <div className="flex items-center mt-4">
-              <span className="text-3xl font-semibold text-blue-600">
+              <span className="text-3xl font-semibold text-blue-500">
                 {totalPenjualan.total} Transaksi
               </span>
             </div>

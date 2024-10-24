@@ -124,7 +124,7 @@ const Usermenu = () => {
             {categories.map((category, i) => (
               <button
                 key={i}
-                className={`bg-gray-200 kategori-item text-gray-700 px-4 py-2 rounded-full mx-2 transition-all transform hover:scale-105 active:scale-95 hover:bg-yellow-200 active:bg-yellow-500 focus:bg-yellow-200 outline-none ${
+                className={`bg-gray-200 kategori-item text-gray-700 px-4 py-2 rounded-full mx-2 transition-all transform hover:scale-105 active:scale-95 hover:bg-yellow-200 focus:outline-none active:bg-yellow-500 ${
                   selectedCategory === category.name
                     ? "bg-yellow-500 text-white"
                     : ""
