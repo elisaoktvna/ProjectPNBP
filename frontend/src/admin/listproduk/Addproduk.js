@@ -2,26 +2,28 @@ import React, { useState, useEffect } from "react";
 import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import { useFetch } from "../../hooks/useFetch";
 
 const AddProduk = () => {
   const [show, setShow] = useState(false);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const { setReload, reload } = useGlobalContext();
 
+  const { data: categories } = useFetch("/kategori");
   // Fetch categories from API
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch(process.env.REACT_APP_BASE_URL + "/kategori"); // Sesuaikan endpoint kategori
-        const data = await res.json();
-        setCategories(data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const res = await fetch(process.env.REACT_APP_BASE_URL + "/kategori"); // Sesuaikan endpoint kategori
+  //       const data = await res.json();
+  //       setCategories(data);
+  //     } catch (error) {
+  //       console.error("Error fetching categories:", error);
+  //     }
+  //   };
 
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -146,7 +148,7 @@ const AddProduk = () => {
                 className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
               >
                 <option value="">Pilih Kategori</option>
-                {categories.map((category) => (
+                {categories?.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.name}
                   </option>

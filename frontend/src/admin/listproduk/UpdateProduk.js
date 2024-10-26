@@ -3,27 +3,29 @@ import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import FileInput from "../../components/File";
+import { useFetch } from "../../hooks/useFetch";
 
 const UpdateProduk = ({ id, data }) => {
   const [show, setShow] = useState(false);
   const { setReload, reload } = useGlobalContext();
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
+  const { data: categories } = useFetch("/kategori");
 
   // Fetch categories from API
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(
-          process.env.REACT_APP_BASE_URL + "/kategori/"
-        );
-        const result = await response.json();
-        setCategories(result);
-      } catch (error) {
-        toast.error("Gagal memuat kategori");
-      }
-    };
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         process.env.REACT_APP_BASE_URL + "/kategori/"
+  //       );
+  //       const result = await response.json();
+  //       setCategories(result);
+  //     } catch (error) {
+  //       toast.error("Gagal memuat kategori");
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
