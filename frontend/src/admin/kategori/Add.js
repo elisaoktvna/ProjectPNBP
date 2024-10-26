@@ -3,6 +3,7 @@ import Modal from "../../components/Modal";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const Add = () => {
   const [Show, setShow] = useState(false);
@@ -16,9 +17,13 @@ const Add = () => {
     formData.append("title", nameVal);
     formData.append("file", imageVal);
     try {
+      const token = getLocalStorage("site");
       await fetch(process.env.REACT_APP_BASE_URL + "/kategori", {
         method: "POST",
         body: formData,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       setShow(false);
       e.target.reset();

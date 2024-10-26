@@ -3,6 +3,7 @@ import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import { useFetch } from "../../hooks/useFetch";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const AddProduk = () => {
   const [show, setShow] = useState(false);
@@ -38,9 +39,14 @@ const AddProduk = () => {
     formData.append("categoryId", categoryId.value);
 
     try {
+      const token = getLocalStorage("site");
+
       const res = await fetch(process.env.REACT_APP_BASE_URL + "/produk", {
         method: "POST",
         body: formData,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       const data = await res.json();
       console.log(data);

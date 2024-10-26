@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import File from "../../components/File";
 import FileInput from "../../components/File";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const Update = ({ id, data }) => {
   const [Show, setShow] = useState(false);
@@ -18,9 +19,14 @@ const Update = ({ id, data }) => {
     formData.append("title", nameVal);
     formData.append("file", imageVal);
     try {
+      const token = getLocalStorage("site");
+
       await fetch(process.env.REACT_APP_BASE_URL + "/kategori/" + id, {
         method: "PUT",
         body: formData,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       setShow(false);
       e.target.reset();

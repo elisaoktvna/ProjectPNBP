@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const DeleteProduk = ({ id, nama }) => {
   const [show, setShow] = useState(false);
@@ -11,8 +12,13 @@ const DeleteProduk = ({ id, nama }) => {
     e.preventDefault();
 
     try {
+      const token = getLocalStorage("site");
+
       await fetch(process.env.REACT_APP_BASE_URL + "/produk/" + id, {
         method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       setShow(false);
       setReload(!reload);
@@ -31,11 +37,7 @@ const DeleteProduk = ({ id, nama }) => {
       >
         Hapus
       </button>
-      <Modal
-        title={"Hapus Produk"}
-        show={show}
-        onClose={(val) => setShow(val)}
-      >
+      <Modal title={"Hapus Produk"} show={show} onClose={(val) => setShow(val)}>
         <form onSubmit={onSubmit}>
           <h5 className="text-sm font-semibold mb-1">
             Apakah anda yakin menghapus data {nama}?
