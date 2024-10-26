@@ -1,12 +1,13 @@
 import express from "express";
 import KategoriController from "../controllers/KategoriController.js";
+import { verifyToken } from "./middleware.js";
 
 const router = express.Router();
 
-router.get("/kategori", KategoriController.getKategori);
-router.get("/kategori/:id", KategoriController.getKategoriById);
-router.post("/kategori", KategoriController.saveKategori);
-router.put("/kategori/:id", KategoriController.updateKategori);
-router.delete("/kategori/:id", KategoriController.deleteKategori);
+router.get("/kategori", verifyToken, KategoriController.getKategori);
+router.get("/kategori/:id", verifyToken, KategoriController.getKategoriById);
+router.post("/kategori", verifyToken, KategoriController.saveKategori);
+router.put("/kategori/:id", verifyToken, KategoriController.updateKategori);
+router.delete("/kategori/:id", verifyToken, KategoriController.deleteKategori);
 
 export default router;
