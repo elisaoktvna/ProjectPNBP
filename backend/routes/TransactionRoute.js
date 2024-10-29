@@ -6,7 +6,7 @@ const router = express.Router();
 
 // router.get("/transaction", TransactionController.getProducts);
 // router.get("/produk/:id", TransactionController.getProductById);
-router.post("/transaction", verifyToken, TransactionController.saveTransaction);
+router.post("/transaction", TransactionController.saveTransaction);
 router.get(
   "/getTotalPenjualan",
   verifyToken,

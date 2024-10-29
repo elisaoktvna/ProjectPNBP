@@ -6,8 +6,16 @@ import GestureHandle from "../hooks/GestureHandle";
 import Modal from "../components/Modal";
 import toast from "react-hot-toast";
 const Usermenu = () => {
-  const { data: produks } = useFetch("/produk");
-  const { data: categories } = useFetch("/kategori");
+  const { data: produks } = useFetch("/produk", {
+    headers: {
+      Authorization: "Bearer " + "kasulisecret",
+    },
+  });
+  const { data: categories } = useFetch("/kategori", {
+    headers: {
+      Authorization: "Bearer " + "kasulisecret",
+    },
+  });
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [orderList, setOrderList] = useState([]);
   const [handleGesture, setHandleGesture] = useState(null);
@@ -85,9 +93,11 @@ const Usermenu = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + "kasulisecret",
         },
         body: JSON.stringify({ products: orderList, print }),
       });
+
       const data = await res.json();
       setModal2(false);
       setReset(true);
@@ -263,12 +273,6 @@ const Usermenu = () => {
 
             {/* Webcam Component */}
             <div className="mt-8">
-              <video
-                ref={webcamRef}
-                className="w-full max-h-[80svh] object-cover"
-                autoPlay
-                playsInline
-              ></video>
               <div
                 style={{
                   position: "absolute",
@@ -277,10 +281,20 @@ const Usermenu = () => {
                   height: "1px",
                   opacity: 0, // Set opacity to 0
                 }}
-              ></div>
+              >
+                <video
+                  ref={webcamRef}
+                  className="w-full max-h-[80svh] object-cover"
+                  autoPlay
+                  playsInline
+                ></video>
+              </div>
             </div>
             <div className="mt-2 text-center">
               <p className="font-semibold">Gesture: {resultPredict.gesture}</p>
+              <p className="font-semibold">
+                Persentase: {resultPredict.accuracy}
+              </p>
               <p className="text-sm text-gray-500">
                 Tangan terdeteksi: {resultPredict.handType}
               </p>

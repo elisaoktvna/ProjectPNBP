@@ -37,7 +37,8 @@ class GestureDetect {
       await tf.setBackend("webgl"); // Use the 'webgl' backend for performance
       await tf.ready();
       const lm = await tf.loadLayersModel(
-        "http://localhost:3000/model/model2/model.json"
+        "http://localhost:3000/model/model.json"
+        // "http://localhost:3000/model/model.json"
       );
       this.model = lm;
     } catch (error) {
@@ -90,12 +91,14 @@ class GestureDetect {
       if (ConvertResult(parseInt(maxKey)) == "Open" && percentageValue > 70) {
         this.setResultPredict({
           gesture: ConvertResult(parseInt(maxKey)),
-          handType: handedness, // Hand type: left or right
+          handType: handedness,
+          accuracy: percentageValue + "%",
         });
       } else if (ConvertResult(parseInt(maxKey)) != "Open") {
         this.setResultPredict({
           gesture: ConvertResult(parseInt(maxKey)),
-          handType: handedness, // Hand type: left or right
+          handType: handedness,
+          accuracy: percentageValue + "%",
         });
       }
     } catch (error) {
