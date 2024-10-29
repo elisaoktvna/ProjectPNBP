@@ -6,8 +6,16 @@ import GestureHandle from "../hooks/GestureHandle";
 import Modal from "../components/Modal";
 import toast from "react-hot-toast";
 const Usermenu = () => {
-  const { data: produks } = useFetch("/produk");
-  const { data: categories } = useFetch("/kategori");
+  const { data: produks } = useFetch("/produk", {
+    headers: {
+      Authorization: "Bearer " + "kasulisecret",
+    },
+  });
+  const { data: categories } = useFetch("/kategori", {
+    headers: {
+      Authorization: "Bearer " + "kasulisecret",
+    },
+  });
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [orderList, setOrderList] = useState([]);
   const [handleGesture, setHandleGesture] = useState(null);
@@ -91,9 +99,11 @@ const Usermenu = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + "kasulisecret",
         },
         body: JSON.stringify({ products: orderList, print }),
       });
+
       const data = await res.json();
       setModal2(false);
       setReset(true);
@@ -114,7 +124,6 @@ const Usermenu = () => {
   };
   return (
     <>
-
       <div className="flex h-screen bg-slate-100">
         <div className="w-3/4 p-4 overflow-y-auto">
           <div className="mb-4">
@@ -169,7 +178,7 @@ const Usermenu = () => {
                     />
                     <div className="text-center mt-16">
                       <h3 className="font-bold">{produk.name}</h3>
-                      <p className="text-blue-500 font-bold text-lg">
+                      <p className="text-orange font-bold text-lg">
                         {produk.price ? `Rp ${produk.price}` : "No price"}
                       </p>
                       <p className="text-yellow-400">
@@ -219,7 +228,7 @@ const Usermenu = () => {
 
                     <div className="flex-1 flex flex-col items-start mr-8">
                       <span className="font-medium text-lg">{item.name}</span>
-                      <span className="font-bold text-2xl text-blue-600">
+                      <span className="font-bold text-2xl text-orange">
                         Rp {item.price * item.qty}
                       </span>
                     </div>
@@ -229,13 +238,13 @@ const Usermenu = () => {
 
                   <div className="flex flex-col justify-between ml-4">
                     <button
-                      className="bg-blue-600 text-white increase rounded-full w-10 h-10 focus:bg-yellow-500 mb-2 font-bold text-lg"
+                      className="bg-orange text-white increase rounded-full w-10 h-10 focus:bg-yellow-500 mb-2 font-bold text-lg"
                       onClick={() => increaseQuantity(item)}
                     >
                       +
                     </button>
                     <button
-                      className="bg-blue-600 text-white decrease rounded-full w-10 h-10 focus:bg-yellow-500 font-bold text-lg"
+                      className="bg-orange text-white decrease rounded-full w-10 h-10 focus:bg-yellow-500 font-bold text-lg"
                       onClick={() => decreaseQuantity(item)}
                     >
                       -
@@ -270,14 +279,7 @@ const Usermenu = () => {
 
             {/* Webcam Component */}
             <div className="mt-8">
-            <video
-                  ref={webcamRef}
-                  className="w-full max-h-[80svh] object-cover"
-                  autoPlay
-                  playsInline
-                ></video>
               <div
-              
                 style={{
                   position: "absolute",
                   top: "0", // Move out of view
@@ -286,11 +288,19 @@ const Usermenu = () => {
                   opacity: 0, // Set opacity to 0
                 }}
               >
-                
+                <video
+                  ref={webcamRef}
+                  className="w-full max-h-[80svh] object-cover"
+                  autoPlay
+                  playsInline
+                ></video>
               </div>
             </div>
             <div className="mt-2 text-center">
               <p className="font-semibold">Gesture: {resultPredict.gesture}</p>
+              <p className="font-semibold">
+                Persentase: {resultPredict.accuracy}
+              </p>
               <p className="text-sm text-gray-500">
                 Tangan terdeteksi: {resultPredict.handType}
               </p>

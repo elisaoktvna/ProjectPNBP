@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const UpdatePengguna = ({ id, data }) => {
   const [Show, setShow] = useState(false);
@@ -20,12 +21,17 @@ const UpdatePengguna = ({ id, data }) => {
     formData.append("role", roleVal);
 
     try {
+      const token = getLocalStorage("site");
+
       const res = await fetch(process.env.REACT_APP_BASE_URL + "/users/" + id, {
         method: "PUT",
         body: formData,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       console.log(await res.json());
-      
+
       setShow(false);
       e.target.reset();
       setReload(!reload);

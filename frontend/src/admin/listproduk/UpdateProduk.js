@@ -3,27 +3,30 @@ import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import FileInput from "../../components/File";
+import { useFetch } from "../../hooks/useFetch";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const UpdateProduk = ({ id, data }) => {
   const [show, setShow] = useState(false);
   const { setReload, reload } = useGlobalContext();
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
+  const { data: categories } = useFetch("/kategori");
 
   // Fetch categories from API
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(
-          process.env.REACT_APP_BASE_URL + "/kategori/"
-        );
-        const result = await response.json();
-        setCategories(result);
-      } catch (error) {
-        toast.error("Gagal memuat kategori");
-      }
-    };
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         process.env.REACT_APP_BASE_URL + "/kategori/"
+  //       );
+  //       const result = await response.json();
+  //       setCategories(result);
+  //     } catch (error) {
+  //       toast.error("Gagal memuat kategori");
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -39,11 +42,16 @@ const UpdateProduk = ({ id, data }) => {
     formData.append("categoryId", categoryId.value);
 
     try {
+      const token = getLocalStorage("site");
+
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/produk/${id}`,
         {
           method: "PUT",
           body: formData,
+          headers: {
+            Authorization: "Bearer " + token,
+          },
         }
       );
 
@@ -151,7 +159,11 @@ const UpdateProduk = ({ id, data }) => {
                 className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
               >
                 {categories?.map((category) => (
-                  <option key={category.id} value={category.id}>
+                  <option
+                    selected={data.categoryId == category.id}
+                    key={category.id}
+                    value={category.id}
+                  >
                     {category.name}
                   </option>
                 ))}

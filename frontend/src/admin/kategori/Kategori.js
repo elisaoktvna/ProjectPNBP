@@ -8,6 +8,8 @@ import Update from "./Update";
 
 const Kategori = () => {
   const { data: kategoris } = useFetch("/kategori");
+  console.log(kategoris);
+
   return (
     <Layout>
       <div className="mb-6 flex items-center ">
@@ -46,7 +48,7 @@ const Kategori = () => {
           </tr>
         </thead>
         <tbody>
-          {kategoris.length == 0 && (
+          {kategoris?.length == 0 && (
             <tr>
               <td
                 className="border-b py-4 text-center text-slate-500"
@@ -56,7 +58,7 @@ const Kategori = () => {
               </td>
             </tr>
           )}
-          {kategoris.map((kategori, i) => {
+          {kategoris?.map((kategori, i) => {
             return (
               <tr key={i}>
                 <td className="border-b py-4  p-2" align="middle">

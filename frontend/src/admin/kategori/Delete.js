@@ -3,6 +3,7 @@ import Modal from "../../components/Modal";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const Delete = ({ id, nama }) => {
   const [Show, setShow] = useState(false);
@@ -11,8 +12,13 @@ const Delete = ({ id, nama }) => {
     e.preventDefault();
 
     try {
+      const token = getLocalStorage("site");
+
       await fetch(process.env.REACT_APP_BASE_URL + "/kategori/" + id, {
         method: "delete",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       setShow(false);
       setReload(!reload);

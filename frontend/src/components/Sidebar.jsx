@@ -9,6 +9,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const logout = async () => {
     setLocalStorage("site", null);
+    localStorage.clear();
     navigate("/login");
   };
 

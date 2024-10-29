@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const DeletePengguna = ({ id, nama }) => {
   const [show, setShow] = useState(false);
@@ -11,8 +12,13 @@ const DeletePengguna = ({ id, nama }) => {
     e.preventDefault();
 
     try {
+      const token = getLocalStorage("site");
+
       await fetch(process.env.REACT_APP_BASE_URL + "/users/" + id, {
         method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       setShow(false);
       setReload(!reload);

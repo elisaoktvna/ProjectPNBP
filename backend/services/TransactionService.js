@@ -12,11 +12,12 @@ escpos.USB = escposUSB; // Menetapkan USB adapter ke escpos
 class TransactionService {
   static async saveTransaction(data) {
     const t = await sequelize.transaction();
+    console.log("halosss");
+
     try {
       const { products, print } = data;
       let totalHarga = 0;
       const receiptDetails = [];
-      console.log(products);
 
       // Create a new transaction
       const result = await Transaction.create(
@@ -64,6 +65,8 @@ class TransactionService {
         },
         transaction: t,
       });
+
+      console.log(print);
 
       // Print the receipt using the thermal printer
       if (print) await TransactionService.printReceipt(receiptDetails);

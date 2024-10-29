@@ -3,6 +3,7 @@ import Modal from "../../components/Modal";
 import { toast } from "react-hot-toast";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import { z } from "zod";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const AddPengguna = () => {
   const [Show, setShow] = useState(false);
@@ -44,10 +45,14 @@ const AddPengguna = () => {
       formBody.append("email", validData.email);
       formBody.append("password", validData.password);
       formBody.append("role", validData.role);
+      const token = getLocalStorage("site");
 
       await fetch(process.env.REACT_APP_BASE_URL + "/users", {
         method: "POST",
         body: formBody,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       });
       setShow(false);
       e.target.reset();
