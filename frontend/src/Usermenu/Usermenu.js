@@ -64,6 +64,12 @@ const Usermenu = () => {
   };
 
   useEffect(() => {
+    if (categories && categories.length > 0) {
+      setSelectedCategory(categories[0].name);
+    }
+  }, [categories]);
+
+  useEffect(() => {
     const gesture = new GestureDetect(webcamRef, setResultPredict);
     gesture.loadModel();
     gesture.startWebcam();
@@ -124,7 +130,7 @@ const Usermenu = () => {
             {categories.map((category, i) => (
               <button
                 key={i}
-                className={`bg-gray-200 kategori-item text-gray-700 px-4 py-2 rounded-full mx-2 transition-all transform hover:scale-105 active:scale-95 hover:bg-yellow-200 focus:outline-none active:bg-yellow-500 ${
+                className={`bg-gray-200 kategori-item text-gray-700 px-4 py-2 rounded-full mx-2 transition-all transform hover:scale-105 outline-none active:scale-95 hover:bg-yellow-200  active:bg-yellow-500 active:outline-none hover:outline-none focus:outline-none ${
                   selectedCategory === category.name
                     ? "bg-yellow-500 text-white"
                     : ""

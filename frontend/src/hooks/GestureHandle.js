@@ -60,11 +60,7 @@ class GestureHandle {
     const { gesture, handType } = this.gesture;
   
     // Jeda waktu antar perubahan fokus (misalnya 1000ms = 1 detik)
-<<<<<<< Updated upstream
-    const delay = 500;
-=======
     const delay = 700;
->>>>>>> Stashed changes
   
     // Cek apakah fokus sedang dalam proses dan belum boleh diganti
     if (this.isFocusing) return;
