@@ -104,7 +104,7 @@ const Usermenu = () => {
                     />
                     <div className="text-center mt-16">
                       <h3 className="font-bold">{produk.name}</h3>
-                      <p className="text-blue-500 font-bold text-lg">{produk.price ? `Rp ${produk.price}` : "No price"}</p>
+                      <p className="text-orange font-bold text-lg">{produk.price ? `Rp ${produk.price}` : "No price"}</p>
                       <p className="text-yellow-400">{produk.rating || "No rating"} <i className="fas fa-star"></i></p>
                     </div>
                   </div>
@@ -140,7 +140,7 @@ const Usermenu = () => {
 
                       <div className="flex-1 flex flex-col items-start mr-8">
                         <span className="font-medium text-lg">{item.name}</span>
-                        <span className="font-bold text-2xl text-blue-600">Rp {item.price * item.quantity}</span>
+                        <span className="font-bold text-2xl text-orange">Rp {item.price * item.quantity}</span>
                       </div>
 
                       <span className="font-bold text-lg">{item.quantity}</span>
@@ -150,13 +150,13 @@ const Usermenu = () => {
 
                   <div className="flex flex-col justify-between ml-4">
                     <button
-                      className="bg-blue-600 text-white rounded-full w-10 h-10 mb-2 font-bold text-lg"
+                      className="bg-orange text-white rounded-full w-10 h-10 mb-2 font-bold text-lg"
                       onClick={() => increaseQuantity(item)}
                     >
                       +
                     </button>
                     <button
-                      className="bg-blue-600 text-white rounded-full w-10 h-10 font-bold text-lg"
+                      className="bg-orange text-white rounded-full w-10 h-10 font-bold text-lg"
                       onClick={() => decreaseQuantity(item)}
                     >
                       -
