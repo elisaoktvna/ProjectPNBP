@@ -37,8 +37,8 @@ class GestureDetect {
       await tf.setBackend("webgl"); // Use the 'webgl' backend for performance
       await tf.ready();
       const lm = await tf.loadLayersModel(
+        // "http://localhost:3000/model/model2/model.json"
         "http://localhost:3000/model/model.json"
-        // "http://localhost:3000/model/model.json"
       );
       this.model = lm;
     } catch (error) {
