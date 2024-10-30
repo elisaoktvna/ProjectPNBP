@@ -61,7 +61,6 @@ class GestureHandle {
 
     // Jeda waktu antar perubahan fokus (misalnya 1000ms = 1 detik)
     const delay = 700;
-
     // Cek apakah fokus sedang dalam proses dan belum boleh diganti
     if (this.isFocusing) return;
 

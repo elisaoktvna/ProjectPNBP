@@ -72,6 +72,12 @@ const Usermenu = () => {
   };
 
   useEffect(() => {
+    if (categories && categories.length > 0) {
+      setSelectedCategory(categories[0].name);
+    }
+  }, [categories]);
+
+  useEffect(() => {
     const gesture = new GestureDetect(webcamRef, setResultPredict);
     gesture.loadModel();
     gesture.startWebcam();
@@ -133,7 +139,7 @@ const Usermenu = () => {
             {categories.map((category, i) => (
               <button
                 key={i}
-                className={`bg-gray-200 kategori-item text-gray-700 px-4 py-2 rounded-full mx-2 transition-all transform hover:scale-105 active:scale-95 hover:bg-yellow-200 focus:outline-none active:bg-yellow-500 ${
+                className={`bg-gray-200 kategori-item text-gray-700 px-4 py-2 rounded-full mx-2 transition-all transform hover:scale-105 outline-none active:scale-95 hover:bg-yellow-200  active:bg-yellow-500 active:outline-none hover:outline-none focus:outline-none ${
                   selectedCategory === category.name
                     ? "bg-yellow-500 text-white"
                     : ""
@@ -172,7 +178,7 @@ const Usermenu = () => {
                     />
                     <div className="text-center mt-16">
                       <h3 className="font-bold">{produk.name}</h3>
-                      <p className="text-blue-500 font-bold text-lg">
+                      <p className="text-orange font-bold text-lg">
                         {produk.price ? `Rp ${produk.price}` : "No price"}
                       </p>
                       <p className="text-yellow-400">
@@ -222,7 +228,7 @@ const Usermenu = () => {
 
                     <div className="flex-1 flex flex-col items-start mr-8">
                       <span className="font-medium text-lg">{item.name}</span>
-                      <span className="font-bold text-2xl text-blue-600">
+                      <span className="font-bold text-2xl text-orange">
                         Rp {item.price * item.qty}
                       </span>
                     </div>
@@ -232,13 +238,13 @@ const Usermenu = () => {
 
                   <div className="flex flex-col justify-between ml-4">
                     <button
-                      className="bg-blue-600 text-white increase rounded-full w-10 h-10 focus:bg-yellow-500 mb-2 font-bold text-lg"
+                      className="bg-orange text-white increase rounded-full w-10 h-10 focus:bg-yellow-500 mb-2 font-bold text-lg"
                       onClick={() => increaseQuantity(item)}
                     >
                       +
                     </button>
                     <button
-                      className="bg-blue-600 text-white decrease rounded-full w-10 h-10 focus:bg-yellow-500 font-bold text-lg"
+                      className="bg-orange text-white decrease rounded-full w-10 h-10 focus:bg-yellow-500 font-bold text-lg"
                       onClick={() => decreaseQuantity(item)}
                     >
                       -
