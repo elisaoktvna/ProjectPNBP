@@ -34,7 +34,7 @@ const Slider = ({ images }) => {
   }
 
   return (
-    <div className="relative w-full overflow-hidden mb-4">
+    <div className="relative w-full overflow-hidden rounded-3xl mb-4">
       {/* Gambar slider dengan smooth transition */}
       <div
         className="flex transition-transform duration-500 ease-in-out"
@@ -47,7 +47,7 @@ const Slider = ({ images }) => {
             key={i}
             src={`${process.env.REACT_APP_BASE_URL}/images/${image}`}
             alt={`Banner ${i + 1}`}
-            className="rounded-3xl min-w-[100%] aspect-[3.5/1] object-cover shadow-md"
+            className=" min-w-[100%] aspect-[3.5/1] object-cover shadow-md"
           />
         ))}
       </div>
