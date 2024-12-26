@@ -18,7 +18,13 @@ router.get(
   TransactionController.getTotalKeuntungan
 );
 router.get("/getChartData", verifyToken, TransactionController.getChartData);
-router.get("/getHistory", verifyToken, TransactionController.getHistory);
+router.get("/getHistory", TransactionController.getHistory);
+router.get(
+  "/getHistory/:id",
+  verifyToken,
+  TransactionController.getHistoryDetail
+);
+// router.get("/getHistory", verifyToken, TransactionController.getHistory);
 // router.put("/produk/:id",verifyToken, TransactionController.updateProduct);
 // router.delete("/produk/:id",verifyToken, TransactionController.deleteProduct);
 

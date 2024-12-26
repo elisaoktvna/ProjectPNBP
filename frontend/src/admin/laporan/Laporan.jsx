@@ -2,36 +2,37 @@ import React, { useRef } from "react";
 import Layout from "../../components/Layout";
 import { useFetch } from "../../hooks/useFetch";
 import Filter from "./Filter";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { formatRupiah } from "./../../helpers/currency";
 import LaporanPrint from "../../print/LaporanPrint";
 import html2pdf from "html2pdf.js";
+import { formatTanggal } from "../../helpers/Date";
 const Laporan = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const currDate = new Date().toISOString().split("T")[0];
-  params.set("endDate", currDate);
+  const currDate = new Date();
+  params.set("endDate", params.get("endDate") ?? currDate);
   const { data: laporan } = useFetch(`/getHistory?${params.toString()}`);
-
-  // Ref for the print content
-  const laporanRef = useRef();
-
-  // Handle printing
-  // const handlePrint = useReactToPrint({
-  //   content: () => laporanRef.current,
-  // });
 
   const handlePrint = () => {
     const element = document.querySelector("#invoice");
     html2pdf(element, { margin: 20 });
   };
+  console.log(params.toString());
 
   return (
     <Layout>
       <div className="flex flex-col" id="invoice">
         <div className="mb-6 flex justify-between ">
-          <h1 className="font-semibold">Laporan Keuangan Bulanan</h1>
-          <Filter currDate={currDate} />
+          <h1 className="font-semibold">
+            Laporan Keuangan{" "}
+            {params.get("startDate")
+              ? formatTanggal(params.get("startDate")) +
+                " - " +
+                formatTanggal(params.get("endDate"))
+              : "Bulanan"}
+          </h1>
+          <Filter currDate={currDate.toISOString().split("T")[0]} />
         </div>
         <h1 className="font-semibold mb-4">
           Jember, Jawa Timur,
@@ -45,29 +46,29 @@ const Laporan = () => {
                 No
               </th>
               <th
-                className="border-b py-4 text-slate-500 font-semibold w-[150px]"
+                className="border-b py-4 text-slate-500 font-semibold "
                 align="start"
               >
-                Nama Produk
+                No. transaksi
               </th>
-              <th
-                className="border-b py-4 text-slate-500 font-semibold"
-                align="start"
-              >
-                Total Terjual
-              </th>
-              <th
-                className="border-b py-4 text-slate-500 font-semibold"
-                align="start"
-              >
-                Harga Satuan
-              </th>
+
               <th
                 className="border-b py-4 text-slate-500 font-semibold"
                 align="start"
               >
                 Total Harga
               </th>
+              <th
+                className="border-b py-4 text-slate-500 font-semibold"
+                align="start"
+              >
+                Tanggal Transaksi
+              </th>
+              <th
+                data-html2canvas-ignore
+                className="border-b py-4 text-slate-500 font-semibold"
+                align="start"
+              ></th>
             </tr>
           </thead>
           <tbody>
@@ -86,10 +87,17 @@ const Laporan = () => {
                 <td className="border-b py-4  p-2" align="middle">
                   {i + 1}
                 </td>
-                <td className="border-b py-4">{lp.name}</td>
-                <td className="border-b py-4">{lp.totalSold}</td>
-                <td className="border-b py-4">{formatRupiah(lp.unitPrice)}</td>
+                <td className="border-b py-4">{lp.no_transaksi}</td>
                 <td className="border-b py-4">{formatRupiah(lp.totalPrice)}</td>
+                <td className="border-b py-4">{formatTanggal(lp.createdAt)}</td>
+                <td className="border-b py-4" data-html2canvas-ignore>
+                  <Link
+                    to={"/laporan/" + lp.id}
+                    className="px-5 mt-5 hover:bg-green-500 hover:text-white ms-auto border text-sm py-2 bg-green-500 text-white rounded-full"
+                  >
+                    Detail
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>

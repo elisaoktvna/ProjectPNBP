@@ -1,9 +1,10 @@
-import { Sequelize } from "sequelize"; // Pastikan sequelize diimport
+import { Op, Sequelize } from "sequelize"; // Pastikan sequelize diimport
 
 import Kategori from "../models/KategoriModel.js";
 import Produk from "../models/ProductModel.js";
 import TransactionDetail from "../models/TransactionDetailModel.js";
 import FileService from "./FileService.js";
+import Transaction from "../models/TransactionModel.js";
 
 class ProdukService {
   static async getProdukAll() {
@@ -16,6 +17,12 @@ class ProdukService {
     return response;
   }
   static async getProdukTerlaris() {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0); // Awal hari ini
+
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999); // Akhir hari ini
+
     const response = await Produk.findAll({
       include: [
         {
@@ -23,23 +30,38 @@ class ProdukService {
           required: true, // Menyertakan kategori jika ada
         },
         {
-          model: TransactionDetail, // Menyertakan detail transaksi
-          attributes: [], // Kita tidak membutuhkan kolom dari TransactionDetail secara langsung
+          model: TransactionDetail,
+          attributes: [], // Tidak memerlukan kolom langsung dari TransactionDetail
           required: true, // Hanya produk yang terjual
+          include: [
+            {
+              model: Transaction,
+              where: {
+                createdAt: {
+                  [Op.between]: [startOfToday, endOfToday], // Filter berdasarkan hari ini
+                },
+              },
+            },
+          ],
         },
       ],
       attributes: [
         "name", // Nama produk
         "price", // Harga produk
         [
-          Sequelize.fn("SUM", Sequelize.col("TransactionDetails.qty")),
-          "totalTerjual", // Total kuantitas yang terjual
+          Sequelize.fn("SUM", Sequelize.col("TransactionDetails.qty")), // Total kuantitas
+          "totalTerjual",
         ],
       ],
-      group: ["products.id", "categoryId"], // Mengelompokkan berdasarkan Produk dan Kategori
-      order: [[Sequelize.literal("totalTerjual"), "DESC"]], // Mengurutkan berdasarkan total terjual (terbesar)
+      group: [
+        "products.id",
+        "categoryId",
+        "products.name",
+        "products.price",
+        "TransactionDetails.transactionId",
+      ], // Kelompokkan berdasarkan Produk dan Kategori
+      order: [[Sequelize.literal("totalTerjual"), "DESC"] ], // Urutkan berdasarkan total terjual
     });
-
     return response;
   }
 

@@ -7,9 +7,10 @@ import AddPengguna from "./AddPengguna.js";
 import UpdatePengguna from "./UpdatePengguna.js";
 import DeletePengguna from "./DeletePengguna.js";
 
-
 const Pengguna = () => {
-  const { data: {data:users} } = useFetch("/users");
+  const {
+    data: { data: users },
+  } = useFetch("/users");
   return (
     <Layout>
       <div className="mb-6 flex items-center ">
@@ -28,7 +29,7 @@ const Pengguna = () => {
               No
             </th>
             <th
-              className="border-b py-4 text-slate-500 font-semibold w-[150px]"
+              className="border-b py-4 text-slate-500 font-semibold w-[200px]"
               align="start"
             >
               Nama
@@ -54,7 +55,7 @@ const Pengguna = () => {
           </tr>
         </thead>
         <tbody>
-           {users?.length == 0 && (
+          {users?.length == 0 && (
             <tr>
               <td
                 className="border-b py-4 text-center text-slate-500"
@@ -63,8 +64,8 @@ const Pengguna = () => {
                 Data pengguna tidak ada
               </td>
             </tr>
-          )} 
-           {users?.map((user, i) => {
+          )}
+          {users?.map((user, i) => {
             return (
               <tr key={i}>
                 <td className="border-b py-4  p-2" align="middle">
@@ -73,13 +74,13 @@ const Pengguna = () => {
                 <td className="border-b py-4">{user.name}</td>
                 <td className="border-b py-4">{user.email}</td>
                 <td className="border-b py-4">{user.role}</td>
-                <td className="border-b py-4"> 
-                <UpdatePengguna id={user.id} data={{...user}} />
-                <DeletePengguna id={user.id} nama={user.name} />
-                 </td>
+                <td className="border-b py-4">
+                  <UpdatePengguna id={user.id} data={{ ...user }} />
+                  <DeletePengguna id={user.id} nama={user.name} />
+                </td>
               </tr>
             );
-          })} 
+          })}
         </tbody>
       </table>
     </Layout>

@@ -65,6 +65,7 @@ const Add = () => {
               Gambar
             </label>
             <input
+              accept="image/*"
               required
               type="file"
               name="image"

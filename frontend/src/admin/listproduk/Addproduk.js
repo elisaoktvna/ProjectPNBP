@@ -11,20 +11,6 @@ const AddProduk = () => {
   const { setReload, reload } = useGlobalContext();
 
   const { data: categories } = useFetch("/kategori");
-  // Fetch categories from API
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const res = await fetch(process.env.REACT_APP_BASE_URL + "/kategori"); // Sesuaikan endpoint kategori
-  //       const data = await res.json();
-  //       setCategories(data);
-  //     } catch (error) {
-  //       console.error("Error fetching categories:", error);
-  //     }
-  //   };
-
-  //   fetchCategories();
-  // }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +19,6 @@ const AddProduk = () => {
     const formData = new FormData();
     formData.append("name", name.value);
     formData.append("price", price.value);
-    formData.append("description", description.value);
-    formData.append("stock", stock.value);
     formData.append("file", image.files[0]);
     formData.append("categoryId", categoryId.value);
 
@@ -90,21 +74,6 @@ const AddProduk = () => {
             </div>
 
             <div className="form-group mb-2 col-span-2">
-              <label
-                htmlFor="description"
-                className="text-sm inline-block mb-1"
-              >
-                Deskripsi
-              </label>
-              <textarea
-                required
-                name="description"
-                id="description"
-                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-                placeholder="Deskripsi Produk"
-              ></textarea>
-            </div>
-            <div className="form-group mb-2">
               <label htmlFor="price" className="text-sm inline-block mb-1">
                 Harga
               </label>
@@ -117,19 +86,7 @@ const AddProduk = () => {
                 placeholder="Harga Produk"
               />
             </div>
-            <div className="form-group mb-2">
-              <label htmlFor="stock" className="text-sm inline-block mb-1">
-                Stok
-              </label>
-              <input
-                required
-                type="number"
-                name="stock"
-                id="stock"
-                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-                placeholder="Jumlah Stok"
-              />
-            </div>
+
             <div className="form-group mb-2 col-span-2">
               <label htmlFor="image" className="text-sm inline-block mb-1">
                 Gambar

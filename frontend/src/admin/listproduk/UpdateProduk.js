@@ -12,30 +12,12 @@ const UpdateProduk = ({ id, data }) => {
   // const [categories, setCategories] = useState([]);
   const { data: categories } = useFetch("/kategori");
 
-  // Fetch categories from API
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         process.env.REACT_APP_BASE_URL + "/kategori/"
-  //       );
-  //       const result = await response.json();
-  //       setCategories(result);
-  //     } catch (error) {
-  //       toast.error("Gagal memuat kategori");
-  //     }
-  //   };
-  //   fetchCategories();
-  // }, []);
-
   const onSubmit = async (e) => {
     e.preventDefault();
     const { name, price, description, stock, image, categoryId } = e.target;
     const formData = new FormData();
     formData.append("name", name.value);
     formData.append("price", price.value);
-    formData.append("description", description.value);
-    formData.append("stock", stock.value);
     if (image.files[0]) {
       formData.append("file", image.files[0]);
     }
@@ -91,23 +73,6 @@ const UpdateProduk = ({ id, data }) => {
             </div>
 
             <div className="form-group mb-2 col-span-2">
-              <label
-                htmlFor="description"
-                className="text-sm inline-block mb-1"
-              >
-                Deskripsi
-              </label>
-              <textarea
-                defaultValue={data?.description}
-                required
-                name="description"
-                id="description"
-                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-                placeholder="Deskripsi Produk"
-              ></textarea>
-            </div>
-
-            <div className="form-group mb-2">
               <label htmlFor="price" className="text-sm inline-block mb-1">
                 Harga
               </label>
@@ -119,21 +84,6 @@ const UpdateProduk = ({ id, data }) => {
                 id="price"
                 className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
                 placeholder="Harga Produk"
-              />
-            </div>
-
-            <div className="form-group mb-2">
-              <label htmlFor="stock" className="text-sm inline-block mb-1">
-                Stok
-              </label>
-              <input
-                defaultValue={data?.stock}
-                required
-                type="number"
-                name="stock"
-                id="stock"
-                className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-                placeholder="Jumlah Stok"
               />
             </div>
 

@@ -7,7 +7,7 @@ const Kategori = db.define(
   "categories",
 
   {
-    name: DataTypes.STRING,
+    name: DataTypes.STRING(50),
 
     image: DataTypes.STRING,
     url: DataTypes.STRING,

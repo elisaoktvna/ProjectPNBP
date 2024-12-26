@@ -10,7 +10,9 @@ import Login from "./auth/Login.jsx";
 import Protected from "./Protected.js";
 import ResetPassword from "./auth/ResetPassword.jsx";
 import Usermenu from "./Usermenu/Usermenu.js";
-import Profil from "./admin/Profil/Profil.js"
+import Profil from "./admin/Profil/Profil.js";
+import Detail from "./admin/laporan/Detail.jsx";
+import Setting from "./admin/setting/Setting.jsx";
 // Lazy load the components
 const Kategori = lazy(() => import("./admin/kategori/Kategori.js"));
 const Produk = lazy(() => import("./admin/listproduk/Produk.js"));
@@ -72,6 +74,22 @@ root.render(
             element={
               <Protected>
                 <Profil />
+              </Protected>
+            }
+          />
+          <Route
+            path="/setting"
+            element={
+              <Protected>
+                <Setting />
+              </Protected>
+            }
+          />
+          <Route
+            path="/laporan/:id"
+            element={
+              <Protected>
+                <Detail />
               </Protected>
             }
           />

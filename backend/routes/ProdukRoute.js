@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/produk", verifyToken, ProductController.getProducts);
 router.get(
   "/produkTerlaris",
-  verifyToken,
+  // verifyToken,
   ProductController.getProductsTerlaris
 );
 router.get("/produk/:id", verifyToken, ProductController.getProductById);

@@ -12,6 +12,7 @@ import {
   Legend,
 } from "chart.js";
 import { formatRupiah } from "../../helpers/currency";
+import { formatTanggal } from "../../helpers/Date";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -115,8 +116,8 @@ const Dashboard = () => {
       <div className="container mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold text-gray-700 mb-4">
-              Tabel Produk Terlaris
+            <h2 className="text-lg font-bold text-gray-700 mb-4">
+              Tabel Produk Terlaris {formatTanggal(new Date())}
             </h2>
             <table className="min-w-full bg-white">
               <thead>
@@ -157,7 +158,7 @@ const Dashboard = () => {
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md h-[400px]">
-            <h2 className="text-xl font-bold text-gray-700 mb-4">
+            <h2 className="text-lg font-bold text-gray-700 mb-4">
               Keuntungan Bulanan
             </h2>
             <div className="h-full">

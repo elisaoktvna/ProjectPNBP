@@ -6,10 +6,8 @@ const { DataTypes } = Sequelize;
 const Product = db.define(
   "products",
   {
-    name: DataTypes.STRING,
+    name: DataTypes.STRING(50),
     price: DataTypes.FLOAT,
-    description: DataTypes.TEXT,
-    stock: DataTypes.INTEGER,
     image: DataTypes.STRING,
     categoryId: {
       type: DataTypes.INTEGER,

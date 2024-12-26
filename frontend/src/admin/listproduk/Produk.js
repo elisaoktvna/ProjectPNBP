@@ -34,20 +34,48 @@ const Produk = () => {
       <table className="border w-full">
         <thead>
           <tr>
-            <th className="border-b py-4 text-slate-500 font-semibold w-16">No</th>
-            <th className="border-b py-4 text-slate-500 font-semibold w-[150px]" align="start">Foto Produk</th>
-            <th className="border-b py-4 text-slate-500 font-semibold" align="start">Nama Produk</th>
-            <th className="border-b py-4 text-slate-500 font-semibold" align="start">Deskripsi</th>
-            <th className="border-b py-4 text-slate-500 font-semibold" align="start">Stock</th>
-            <th className="border-b py-4 text-slate-500 font-semibold" align="start">Harga</th>
-            <th className="border-b py-4 text-slate-500 font-semibold" align="start">Kategori</th>
-            <th className="border-b py-4 text-slate-500 w-[200px] font-semibold" align="start">Aksi</th>
+            <th className="border-b py-4 text-slate-500 font-semibold w-16">
+              No
+            </th>
+            <th
+              className="border-b py-4 text-slate-500 font-semibold w-[150px]"
+              align="start"
+            >
+              Foto Produk
+            </th>
+            <th
+              className="border-b py-4 text-slate-500 font-semibold"
+              align="start"
+            >
+              Nama Produk
+            </th>
+            <th
+              className="border-b py-4 text-slate-500 font-semibold"
+              align="start"
+            >
+              Harga
+            </th>
+            <th
+              className="border-b py-4 text-slate-500 font-semibold"
+              align="start"
+            >
+              Kategori
+            </th>
+            <th
+              className="border-b py-4 text-slate-500 w-[200px] font-semibold"
+              align="start"
+            >
+              Aksi
+            </th>
           </tr>
         </thead>
         <tbody>
           {currentItems.length === 0 ? (
             <tr>
-              <td className="border-b py-4 text-center text-slate-500" colSpan={"8"}>
+              <td
+                className="border-b py-4 text-center text-slate-500"
+                colSpan={"8"}
+              >
                 Data produk tidak ada
               </td>
             </tr>
@@ -59,14 +87,16 @@ const Produk = () => {
                 </td>
                 <td className="border-b py-4">
                   <img
-                    src={produk.image ? `${backendURL}/images/${produk.image}` : `${backendURL}/images/default-image.jpg`}
+                    src={
+                      produk.image
+                        ? `${backendURL}/images/${produk.image}`
+                        : `${backendURL}/images/default-image.jpg`
+                    }
                     className="w-[50px] h-[50px] bg-[#FFC200] rounded-md"
                     alt={produk.name || "Produk"}
                   />
                 </td>
                 <td className="border-b py-4">{produk.name}</td>
-                <td className="border-b py-4">{produk.description}</td>
-                <td className="border-b py-4">{produk.stock}</td>
                 <td className="border-b py-4">{formatRupiah(produk.price)}</td>
                 <td className="border-b py-4">{produk.category?.name}</td>
                 <td className="border-b py-4">
@@ -83,7 +113,7 @@ const Produk = () => {
       {totalPages > 1 && (
         <div className="mt-4 flex justify-center">
           <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
             className="mx-1 px-3 py-1 border bg-white"
           >
@@ -93,13 +123,17 @@ const Produk = () => {
             <button
               key={i + 1}
               onClick={() => paginate(i + 1)}
-              className={`mx-1 px-3 py-1 border ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-white"}`}
+              className={`mx-1 px-3 py-1 border ${
+                currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-white"
+              }`}
             >
               {i + 1}
             </button>
           ))}
           <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
             disabled={currentPage === totalPages}
             className="mx-1 px-3 py-1 border bg-white"
           >

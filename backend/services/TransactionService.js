@@ -12,16 +12,27 @@ escpos.USB = escposUSB; // Menetapkan USB adapter ke escpos
 class TransactionService {
   static async saveTransaction(data) {
     const t = await sequelize.transaction();
-    console.log("halosss");
 
     try {
       const { products, print } = data;
       let totalHarga = 0;
       const receiptDetails = [];
-
+      const totalTransaksi = await Transaction.count({
+        where: {
+          createdAt: {
+            [Op.eq]: new Date(),
+          },
+        },
+      });
+      const no_transaksi = this.generateTransactionNumber(
+        "TRX",
+        new Date(),
+        totalTransaksi == 0 ? 1 : totalTransaksi
+      );
       // Create a new transaction
       const result = await Transaction.create(
         {
+          no_transaksi: no_transaksi,
           totalPrice: totalHarga,
           createdAt: new Date(),
         },
@@ -81,6 +92,22 @@ class TransactionService {
       await t.rollback();
       return { status: "error", message: error.message };
     }
+  }
+  static generateTransactionNumber(
+    prefix = "TRX",
+    currentDate = new Date(),
+    sequenceNumber = 1
+  ) {
+    // Format tanggal: YYYYMMDD
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Bulan dimulai dari 0
+    const day = String(currentDate.getDate()).padStart(2, "0");
+
+    // Format nomor urut: 001, 002, dst.
+    const formattedSequence = String(sequenceNumber).padStart(3, "0");
+
+    // Gabungkan semuanya
+    return `${prefix}-${year}${month}${day}-${formattedSequence}`;
   }
 
   static async printReceipt(receiptDetails) {
@@ -255,48 +282,25 @@ class TransactionService {
       throw new Error("Due date is required.");
     }
 
-    // Ambil data transaksi per produk berdasarkan tanggal
-    const response = await TransactionDetail.findAll({
-      attributes: [
-        [Sequelize.fn("SUM", Sequelize.col("qty")), "totalSold"],
-        [Sequelize.col("TransactionDetail.price"), "unitPrice"],
-        [
-          Sequelize.fn(
-            "SUM",
-            Sequelize.literal("qty * TransactionDetail.price")
-          ),
-          "totalPrice",
-        ],
-        [Sequelize.col("Product.name"), "productName"],
-      ],
+    return Transaction.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: startDate,
+          [Op.lt]: endDate,
+        },
+      },
+      order: [["createdAt", "desc"]],
+    });
+  }
+  static async getHistoryDetail(idTransaksi) {
+    return await Transaction.findByPk(idTransaksi, {
       include: [
         {
-          model: Transaction,
-          attributes: [],
-          where: {
-            createdAt: {
-              [Op.gte]: startDate,
-              [Op.lt]: endDate,
-            },
-          },
-        },
-        {
-          model: Product,
-          attributes: ["name"],
+          model: TransactionDetail,
+          include: Product,
         },
       ],
-      group: ["productId", "TransactionDetail.price", "Product.name"], // Group by productId, price, and product name
-      order: [[Sequelize.literal("totalSold"), "DESC"]], // Urutkan hasil berdasarkan jumlah produk terjual (DESC)
     });
-    // Format data untuk chart atau laporan
-    const chartData = response.map((data) => ({
-      name: data.get("productName"),
-      totalSold: data.get("totalSold"),
-      unitPrice: data.get("unitPrice"),
-      totalPrice: data.get("totalPrice"),
-    }));
-
-    return chartData;
   }
 }
 

@@ -10,6 +10,10 @@ const Transaction = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
+    no_transaksi: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+    },
     totalPrice: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,

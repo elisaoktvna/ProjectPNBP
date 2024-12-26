@@ -5,12 +5,22 @@ import GestureDetect from "../hooks/GestureDetect";
 import GestureHandle from "../hooks/GestureHandle";
 import Modal from "../components/Modal";
 import toast from "react-hot-toast";
+import ListMenu from "./ListMenu";
+import LisitKategori from "./LisitKategori";
+import ListCart from "./ListCart";
+import Slider from "./Slider";
 const Usermenu = () => {
   const { data: produks } = useFetch("/produk", {
     headers: {
       Authorization: "Bearer " + "kasulisecret",
     },
   });
+  const { data: setting } = useFetch("/setting", {
+    headers: {
+      Authorization: "Bearer " + "kasulisecret",
+    },
+  });
+
   const { data: categories } = useFetch("/kategori", {
     headers: {
       Authorization: "Bearer " + "kasulisecret",
@@ -126,71 +136,21 @@ const Usermenu = () => {
     <>
       <div className="flex h-screen bg-slate-100">
         <div className="w-3/4 p-4 overflow-y-auto">
-          <div className="mb-4">
-            <img
-              src={Baner}
-              alt="Baner"
-              className="rounded-3xl shadow-md w-full"
-            />
-          </div>
+          <Slider images={setting?.data?.images} />
 
           {/* Tombol kategori */}
-          <div className="flex kategori-parent outline-none border-b-4 pb-3 justify-center mb-4">
-            {categories.map((category, i) => (
-              <button
-                key={i}
-                className={`bg-gray-200 kategori-item text-gray-700 px-4 py-2 rounded-full mx-2 transition-all transform hover:scale-105 outline-none active:scale-95 hover:bg-yellow-200  active:bg-yellow-500 active:outline-none hover:outline-none focus:outline-none ${
-                  selectedCategory === category.name
-                    ? "bg-yellow-500 text-white"
-                    : ""
-                }`}
-                onClick={() => setSelectedCategory(category.name)}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
+          <LisitKategori
+            selectedCategory={selectedCategory}
+            categories={categories}
+            setSelectedCategory={setSelectedCategory}
+          />
 
-          {/* Konten item makanan/minuman */}
-          <div className="pt-24 grid grid-cols-4 produk-parent  border-l-4 pl-4 outline-none  gap-x-6 gap-y-20">
-            {filteredProduks?.length === 0 ? (
-              <div className="text-center text-gray-500">
-                Tidak ada produk untuk kategori {selectedCategory}
-              </div>
-            ) : (
-              filteredProduks?.map((produk) => {
-                return (
-                  <div
-                    key={produk.id}
-                    tabIndex="-1"
-                    className="bg-white p-4 border-transparent active:border-yellow-500 focus:border-yellow-500 border-4 outline-none  produk-item rounded-lg shadow-md flex flex-col items-center relative group hover:-translate-y-3 focus:-translate-y-3 active:-translate-y-3  transition-transform duration-200 ease-in-out"
-                    onClick={() => addToOrder(produk)}
-                  >
-                    <img
-                      src={
-                        produk.image
-                          ? `${backendURL}/images/${produk.image}`
-                          : `${backendURL}/images/default-image.jpg`
-                      }
-                      alt={produk.name || "Produk"}
-                      className="absolute top-0 transform -translate-y-1/2 mb-2 object-cover"
-                      style={{ width: "150px", height: "150px" }}
-                    />
-                    <div className="text-center mt-16">
-                      <h3 className="font-bold">{produk.name}</h3>
-                      <p className="text-orange font-bold text-lg">
-                        {produk.price ? `Rp ${produk.price}` : "No price"}
-                      </p>
-                      <p className="text-yellow-400">
-                        {produk.rating || "No rating"}{" "}
-                        <i className="fas fa-star"></i>
-                      </p>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
+          <ListMenu
+            filteredProduks={filteredProduks}
+            backendURL={backendURL}
+            selectedCategory={selectedCategory}
+            addToOrder={addToOrder}
+          />
         </div>
 
         <div className="w-1/3 p-4 bg-white cart-parent outline-none border-l-4  shadow-md flex flex-col justify-between h-full">
@@ -202,58 +162,12 @@ const Usermenu = () => {
           </div>
 
           {/* Daftar item */}
-          <div className="flex-grow overflow-auto">
-            {orderList.length === 0 ? (
-              <div className="text-center text-gray-500">
-                Belum ada item yang dipesan.
-              </div>
-            ) : (
-              orderList.map((item) => (
-                <div key={item.id} className="flex  items-center mb-4">
-                  <div
-                    tabIndex="-1"
-                    className="flex-1 outline-none bg-white cart-item  shadow-md h-28 rounded-2xl pr-4 pl-4 flex justify-between items-center"
-                  >
-                    <div className="flex-1 rounded-2xl mr-8">
-                      <img
-                        src={
-                          item.image
-                            ? `${backendURL}/images/${item.image}`
-                            : `${backendURL}/images/default-image.jpg`
-                        }
-                        alt={item.name}
-                        className="size-20 rounded-2xl ml-5 mr-2"
-                      />
-                    </div>
-
-                    <div className="flex-1 flex flex-col items-start mr-8">
-                      <span className="font-medium text-lg">{item.name}</span>
-                      <span className="font-bold text-2xl text-orange">
-                        Rp {item.price * item.qty}
-                      </span>
-                    </div>
-
-                    <span className="font-bold text-lg">{item.qty}</span>
-                  </div>
-
-                  <div className="flex flex-col justify-between ml-4">
-                    <button
-                      className="bg-orange text-white increase rounded-full w-10 h-10 focus:bg-yellow-500 mb-2 font-bold text-lg"
-                      onClick={() => increaseQuantity(item)}
-                    >
-                      +
-                    </button>
-                    <button
-                      className="bg-orange text-white decrease rounded-full w-10 h-10 focus:bg-yellow-500 font-bold text-lg"
-                      onClick={() => decreaseQuantity(item)}
-                    >
-                      -
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+          <ListCart
+            backendURL={backendURL}
+            decreaseQuantity={decreaseQuantity}
+            increaseQuantity={increaseQuantity}
+            orderList={orderList}
+          />
 
           {/* Bagian bawah */}
           <div>

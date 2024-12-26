@@ -48,6 +48,15 @@ class TransactionController {
       return res.status(500).json({ message: error.message });
     }
   }
+  static async getHistoryDetail(req, res) {
+    try {
+      const { id } = req.params;
+      const response = await TransactionService.getHistoryDetail(id);
+      return res.json(response);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 export default TransactionController;

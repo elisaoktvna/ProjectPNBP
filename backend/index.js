@@ -10,6 +10,7 @@ import TransactionRoute from "./routes/TransactionRoute.js";
 import "./associations.js";
 import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import SettingRoute from "./routes/SettingRoute.js";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use(TransactionRoute);
 app.use(ProdukRoute);
 app.use(UserRoute);
 app.use(AuthRoute);
+app.use(SettingRoute);
 
 // app.listen(5000, "10.10.184.250");
 app.listen(5000, () => console.log("server up and running..."));

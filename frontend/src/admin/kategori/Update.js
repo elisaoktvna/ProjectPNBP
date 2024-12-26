@@ -68,14 +68,9 @@ const Update = ({ id, data }) => {
             <label htmlFor="image" className="text-sm inline-block mb-1">
               Gambar
             </label>
-            {/* <input
-              required
-              type="file"
-              name="image"
-              id="image"
-              className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
-            /> */}
-            <FileInput
+
+            <File
+              accept="image/*"
               name={"image"}
               url={process.env.REACT_APP_BASE_URL + "/images/" + data.image}
             />

@@ -92,6 +92,18 @@ const Sidebar = () => {
           </li>
           <li className="mb-2">
             <Link
+              to={"/setting"}
+              className={`${
+                pathname == "/setting"
+                  ? "bg-[#FF8E29] text-white"
+                  : "hover:bg-[#FF8E29]/20 text-slate-600"
+              } block px-4 py-2 rounded `}
+            >
+              <i className="me-2 fa fa-gear"></i> Setting
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link
               to={"/profil"}
               className={`${
                 pathname == "/profil"
