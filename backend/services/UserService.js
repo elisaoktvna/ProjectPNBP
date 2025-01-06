@@ -1,3 +1,4 @@
+import { Sequelize } from "sequelize";
 import { CustomError } from "../helpers/CustomError.js";
 import User from "../models/UserModel.js";
 import argon2 from "argon2";
@@ -46,7 +47,21 @@ class UserService {
     if (!user) {
       throw new CustomError("User tidak ditemukan", 404);
     }
-    
+    const userEmail = await User.findOne({
+      where: {
+        email: data.email,
+        id: {
+          [Sequelize.Op.ne]: id,
+        },
+      },
+    });
+    if (userEmail) {
+      throw new CustomError(
+        "User dengan email " + data.email + " sudah ada",
+        409
+      );
+    }
+
     return await User.update(
       {
         name: data.name,

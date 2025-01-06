@@ -47,17 +47,22 @@ const AddPengguna = () => {
       formBody.append("role", validData.role);
       const token = getLocalStorage("site");
 
-      await fetch(process.env.REACT_APP_BASE_URL + "/users", {
+      const res = await fetch(process.env.REACT_APP_BASE_URL + "/users", {
         method: "POST",
         body: formBody,
         headers: {
           Authorization: "Bearer " + token,
         },
       });
-      setShow(false);
-      e.target.reset();
-      setReload(!reload);
-      toast.success("Pengguna berhasil ditambahkan");
+      const req = await res.json();
+      if (res.ok) {
+        setShow(false);
+        e.target.reset();
+        setReload(!reload);
+        toast.success("Pengguna berhasil ditambahkan");
+      } else {
+        toast.error(req.message);
+      }
     } catch (error) {
       toast.error("Pengguna gagal ditambahkan");
     }

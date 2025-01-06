@@ -30,12 +30,15 @@ const UpdatePengguna = ({ id, data }) => {
           Authorization: "Bearer " + token,
         },
       });
-      console.log(await res.json());
-
-      setShow(false);
-      e.target.reset();
-      setReload(!reload);
-      toast.success("Pengguna berhasil diubah");
+      const req = await res.json();
+      if (res.ok) {
+        setShow(false);
+        e.target.reset();
+        setReload(!reload);
+        toast.success("Pengguna berhasil diubah");
+      } else {
+        toast.error(req.message);
+      }
     } catch (error) {
       toast.error("Pengguna gagal diubah");
     }
