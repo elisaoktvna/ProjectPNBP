@@ -45,6 +45,7 @@ const UpdateProduk = ({ id, data }) => {
       toast.error("Produk gagal diubah");
     }
   };
+  const category = categories.find((e) => e.id == data.categoryId);
 
   return (
     <>
@@ -102,21 +103,25 @@ const UpdateProduk = ({ id, data }) => {
                 Kategori
               </label>
               <select
-                defaultValue={data?.categoryId}
                 required
                 name="categoryId"
                 id="categoryId"
                 className="block bg-[#F5F5F5] w-full rounded-lg px-4 py-2 text-sm"
               >
-                {categories?.map((category) => (
-                  <option
-                    selected={data.categoryId == category.id}
-                    key={category.id}
-                    value={category.id}
-                  >
-                    {category.name}
-                  </option>
-                ))}
+                <option selected key={category?.id} value={category?.id}>
+                  {category?.name}
+                </option>
+                {categories?.map((category) => {
+                  const selected = category.id == data.categoryId;
+                  if (selected) {
+                    console.log("Kategori " + category.id);
+                  }
+                  return (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>
